@@ -1,0 +1,22 @@
+.label {
+  display: flex;
+  flex-direction: column;
+}
+
+.text {
+  margin-bottom: 12px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.5px;
+}
+
+.input {
+  padding: 10px 32px;
+  background: #171a1b;
+  border: none;
+  border-radius: 8px 8px 0px 0px;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+  color: inherit;
+}
