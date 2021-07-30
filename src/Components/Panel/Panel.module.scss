@@ -1,0 +1,57 @@
+.wrapper {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  width: 345px;
+  background: #030303;
+}
+
+.logo {
+  margin-bottom: 32px;
+  display: block;
+
+  img {
+    display: block;
+  }
+}
+
+.text {
+  font-weight: 300;
+  letter-spacing: 0.5px;
+
+  b {
+    margin-bottom: 12px;
+    display: block;
+    font-weight: 600;
+  }
+
+  p + p {
+    margin-top: 32px;
+  }
+}
+
+.actions {
+  margin-top: auto;
+}
+
+.exit {
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1.14;
+  letter-spacing: 0.5px;
+  color: #ffffff;
+  opacity: 0.3;
+  cursor: pointer;
+
+  svg {
+    margin-right: 12px;
+  }
+
+  &:hover {
+    opacity: 1;
+  }
+}
