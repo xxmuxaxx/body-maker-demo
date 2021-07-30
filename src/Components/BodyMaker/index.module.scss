@@ -25,7 +25,8 @@
 }
 
 .field {
-  position: relative;
+  position: sticky;
+  top: 0;
   width: 680px;
   height: 680px;
   background: url(../../assets/img/bg.svg);
