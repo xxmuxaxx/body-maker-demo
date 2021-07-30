@@ -1,7 +1,11 @@
-import BodyMaker from "./Components/BodyMaker/BodyMaker";
+import React from "react";
 
-function App() {
-  return <BodyMaker />;
-}
+import Layout from "./Containers/Layout/Layout";
+
+import "./app.scss";
+
+const App = () => {
+  return <Layout />;
+};
 
 export default App;
