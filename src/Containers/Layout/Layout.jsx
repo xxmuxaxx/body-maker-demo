@@ -1,7 +1,8 @@
 import React from "react";
 
-import { BodyMaker } from "../../Components/BodyMaker";
 import Panel from "../../Components/Panel/Panel";
+// import { BodyMaker } from "../../Components/BodyMaker";
+import MyAwards from "../../Components/MyAwards/MyAwards";
 
 import styles from "./Layout.module.scss";
 
@@ -10,7 +11,8 @@ const Layout = () => {
     <div className={styles.wrapper}>
       <Panel />
       <div className={styles.content}>
-        <BodyMaker />
+        {/*<BodyMaker />*/}
+        <MyAwards />
       </div>
     </div>
   );

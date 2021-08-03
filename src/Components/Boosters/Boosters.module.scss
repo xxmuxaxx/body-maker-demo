@@ -1,0 +1,31 @@
+.list {
+  display: grid;
+  max-width: 1000px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.card {
+  padding: 32px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background: #383B3D;
+  border-radius: 8px;
+}
+
+.cardTitle {
+  margin-bottom: auto;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.cardImage {
+  margin: 20px 0;
+  display: block;
+  width: auto;
+  height: auto;
+}
