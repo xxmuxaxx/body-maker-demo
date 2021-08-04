@@ -55,3 +55,237 @@
     opacity: 1;
   }
 }
+
+.infoWrapper {
+  display: flex;
+}
+
+.infoLeft {
+  display: flex;
+  width: 124px;
+  min-width: 124px;
+  height: 184px;
+  min-height: 184px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-image: url('../../assets/img/emblem.png');
+}
+
+.infoAvatar {
+  display: block;
+}
+
+.infoName {
+  margin: 8px 0;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 14px;
+  text-align: center;
+  letter-spacing: 0.5px;
+  color: #202324;
+}
+
+.infoRight {
+  margin: 0 0 0 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.infoList {
+  margin: 0 0 20px 0;
+  padding: 0;
+  list-style: none;
+}
+
+.infoListItem + .infoListItem {
+  margin-top: 16px;
+}
+
+.infoStats {
+  margin-bottom: 6px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.infoStatsName {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  color: #717171;
+}
+
+.infoStatsValue {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.infoBar {
+  position: relative;
+  width: 100%;
+  height: 4px;
+  background-color: rgba(#ffffff, .1);
+  border-radius: 2px;
+}
+
+.infoBarLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(272.89deg, #96C83C 6.25%, #26C273 104.48%);;
+  border-radius: 2px;
+}
+
+.rankWrapper {
+  margin-top: auto;
+}
+
+.rankName {
+  margin: 0 0 8px 0;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  color: #96C83C;
+
+}
+
+.rankStars {
+  display: flex;
+  justify-content: space-between;
+}
+
+.rankStar {
+  display: block;
+}
+
+.experience {
+  margin-top: 20px;
+}
+
+.experienceTop {
+  position: relative;
+  margin-bottom: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.experienceFrom,
+.experienceCurrent,
+.experienceTo {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+}
+
+.experienceCurrent {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.experienceBar {
+  position: relative;
+  margin-bottom: 8px;
+  width: 100%;
+  height: 4px;
+  background-color: rgba(#ffffff, .1);
+  border-radius: 2px;
+}
+
+.experienceBarLine {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: linear-gradient(272.89deg, #96C83C 6.25%, #26C273 104.48%);;
+  border-radius: 2px;
+}
+
+.experienceBottom {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.experienceRankFrom,
+.experienceRankTo {
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  color: #717171;
+}
+
+.balanceWrapper {
+  margin-top: 24px;
+}
+
+.balance {
+  margin-bottom: 16px;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #717171;
+
+  b {
+    padding-left: 4px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #FFFFFF;
+  }
+}
+
+.nav {
+  margin: 28px -16px 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.linkActive {
+  background: linear-gradient(263.06deg, #96C83C 18.87%, #26C273 78.51%);
+  border-radius: 8px;
+}
+
+.linkIcon {
+  margin-right: 16px;
+  display: block;
+}
+
+.linkName {
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+}
+
+.linkLabel {
+  margin-left: 8px;
+  font-weight: bold;
+  color: #96C83C;
+}
+
+.linkActive .linkLabel {
+  color: #ffffff;
+}
