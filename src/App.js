@@ -1,12 +1,48 @@
 import React from "react";
+import { BrowserRouter, Link, Route, Switch } from "react-router-dom";
 
 import Layout from "./Containers/Layout/Layout";
+import { BodyMaker } from "./Components/BodyMaker";
+import MyAwards from "./Components/MyAwards/MyAwards";
 
 import "normalize.css";
 import "./app.scss";
 
 const App = () => {
-  return <Layout />;
+  return (
+    <BrowserRouter>
+      <Layout>
+        <Switch>
+          <Route exact path="/body-maker">
+            <BodyMaker />
+          </Route>
+          <Route exact path="/my-awards">
+            <MyAwards />
+          </Route>
+
+          <Route path="/">
+            <>
+              <h1>Страницы</h1>
+              <nav
+                style={{
+                  fontSize: "2rem",
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <Link to="/body-maker" style={{ color: "white" }}>
+                  Body Maker
+                </Link>
+                <Link to="/my-awards" style={{ color: "white" }}>
+                  My Awards
+                </Link>
+              </nav>
+            </>
+          </Route>
+        </Switch>
+      </Layout>
+    </BrowserRouter>
+  );
 };
 
 export default App;
