@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./index.module.scss";
 
-const Body = ({ bodyColor }) => {
+const Body = ({ bodyColor = '#EDC4B0' }) => {
   return (
     <svg
       className={styles.body}

@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './Card.module.scss'
 import Button from "../utils/Button/Button";
 
-const Card = ({item, showButton}) => {
+const Card = ({item, showButton, hideButton, onHide, onShow}) => {
     return (
         <div className={styles.wrapper}>
             <div className={styles.imageWrapper}>
@@ -29,7 +29,8 @@ const Card = ({item, showButton}) => {
                 </li>
             </ul>
 
-            {showButton ? <Button>Надеть</Button> : null}
+            {showButton ? <Button onClick={() => onShow(item)}>Надеть</Button> : null}
+            {hideButton ? <Button onClick={onHide}>Снять</Button> : null}
         </div>
     )
 }

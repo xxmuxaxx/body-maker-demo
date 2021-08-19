@@ -1,0 +1,91 @@
+.wrapper {
+  display: grid;
+  width: 100%;
+  max-width: 1015px;
+  grid-template: 'banner banner' 'boosters field' 'points field' auto / 308px 1fr;
+  gap: 20px;
+}
+
+.field {
+  grid-area: field;
+  position: sticky;
+  top: 0;
+  width: 680px;
+  height: 680px;
+  background: url(../../assets/img/bg.svg);
+  border-radius: 8px;
+  //overflow: hidden;
+}
+
+.shirt {
+  position: absolute;
+  top: 180px;
+  left: 50%;
+  display: block;
+  width: auto;
+  height: 216px;
+  transform: translateX(calc(-50% - 4px));
+}
+
+.bodyCell {
+  position: absolute;
+  top: 184px;
+  left: 220px;
+  width: 235px;
+  height: 213px;
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(32, 35, 36, 0.5);
+  box-sizing: border-box;
+  border-radius: 8px;
+  transition: all .2s linear;
+}
+
+.bodyCell:before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 12px;
+  height: 12px;
+  background: #E4CB6F;
+  border-radius: 50%;
+}
+
+.bodyCell:hover {
+  border-color: #96C83C;
+}
+
+.bodyCellEmpty {
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.bodyCellEmpty:before {
+  content: none;
+}
+
+.cellIcon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+}
+
+.cardWrapper {
+  position: absolute;
+  top: 0;
+  right: 100%;
+  padding-right: 20px;
+  min-width: 240px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .2s linear;
+}
+
+.bodyCell:hover .cardWrapper {
+  opacity: 1;
+  visibility: visible;
+}

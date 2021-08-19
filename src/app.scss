@@ -16,3 +16,277 @@ html {
 body {
   background: #202324;
 }
+
+//top-banner
+.top-banner {
+  padding: 24px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  grid-area: banner;
+  background: linear-gradient(85.76deg, #96C83C 6.95%, #26C273 91%);
+  border-radius: 8px;
+}
+
+.top-banner__text {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #202324;
+}
+
+.top-banner__button {
+  padding: 10px 72px;
+  background: #181818;
+  border: 1px solid #181818;
+  border-radius: 50px;
+  font-weight: bold;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.5px;
+  color: #4BA33E;
+  cursor: pointer;
+}
+
+//boosters-panel
+.boosters-panel {
+  padding: 32px 36px;
+  grid-area: boosters;
+  background: #181818;
+  border-radius: 8px;
+}
+
+.boosters-panel__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.boosters-panel__row + .boosters-panel__row {
+  margin-top: 24px;
+}
+
+.boosters-panel__title {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+
+}
+
+.boosters-panel__new {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: #202324;
+  border-radius: 50%;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #96C83C;
+  z-index: 1;
+}
+
+//points-panel
+.points-panel {
+  padding: 32px 36px;
+  grid-area: points;
+  background: #181818;
+  border-radius: 8px;
+}
+
+.points-panel__title {
+  margin: 0 0 24px 0;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+}
+
+.points-panel__available {
+  margin: 0 0 16px 0;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: #717171;
+
+  span {
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    color: #FFFFFF;
+  }
+}
+
+.points-panel__distribute {
+  margin: 0 0 24px 0;
+}
+
+.points-panel__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.points-panel__item {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  background: #202324;
+  border-radius: 8px;
+}
+
+.points-panel__item + .points-panel__item {
+  margin: 12px 0 0 0;
+}
+
+.points-panel__item-right {
+  margin: 0 0 0 16px;
+}
+
+.points-panel__item-name {
+  margin: 0 0 10px 0;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: rgba(#ffffff, .3);
+}
+
+.points-panel__item-value {
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+}
+
+//circle-progress
+.circle-progress {
+}
+
+.circle-progress__progress {
+  fill: none;
+}
+
+.circle-progress__background {
+  stroke: #181818;
+  fill: #181818;
+}
+
+.circle-progress__progress {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.circle-progress__text {
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 16px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  fill: #96C83C;
+}
+
+//clothes-modal
+.clothes-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 48px;
+  background: rgba(29, 31, 32, 0.4);
+  backdrop-filter: blur(20px);
+  opacity: 0;
+  visibility: hidden;
+  transition: all .2s linear;
+  z-index: 101;
+}
+
+.clothes-modal--active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.clothes-modal__wrapper {
+  margin: 0 auto;
+  display: flex;
+  width: 100%;
+  max-width: 1144px;
+  height: 100%;
+  flex-direction: column;
+  background: #202324;
+  border-radius: 8px;
+}
+
+.clothes-modal__top {
+  padding: 52px 64px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.clothes-modal__title {
+  font-weight: 600;
+  font-size: 24px;
+  line-height: 24px;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+}
+
+.clothes-modal__actions {
+  display: flex;
+  white-space: nowrap;
+}
+
+.clothes-modal__actions button + button {
+  margin: 0 0 0 16px;
+}
+
+.clothes-modal__middle {
+  padding: 0 14px;
+  flex: 1;
+  overflow: hidden;
+}
+
+.clothes-modal__grid {
+  padding: 0 50px;
+  display: grid;
+  max-height: 100%;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  overflow-x: hidden;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #171A1B;
+    border: 1px solid #717171;
+    border-radius: 8px;
+  }
+}
+
+.clothes-modal__bottom {
+  padding: 12px 40px;
+  display: flex;
+  justify-content: flex-end;
+  background: #2C2F30;
+  box-shadow: 0px -8px 8px rgba(0, 0, 0, 0.25);
+  border-radius: 0 0 8px 8px;
+}

@@ -3,15 +3,15 @@ import React from "react";
 import styles from "./index.module.scss";
 
 const Head = ({
-  bodyColor,
-  hairColor,
-  showHair,
-  beardColor,
-  showBeard,
-  browsColor,
-  showBrows,
-  eyesColor,
-  mouthColor,
+  bodyColor = "#EDC4B0",
+  hairColor = "#492B15",
+  showHair = true,
+  beardColor = "#492B15",
+  showBeard = true,
+  browsColor = "#492B15",
+  showBrows  = true,
+  eyesColor = "#492B15",
+  mouthColor = "#D9A191",
 }) => {
   return (
     <svg
