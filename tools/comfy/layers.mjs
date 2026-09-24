@@ -143,33 +143,49 @@ export const toWebp = (png) => sharp(png).webp({ quality: 90, alphaQuality: 90 }
 // Everything above this line (body units) belongs to the head; below it only hair is kept.
 export const CHIN_Y = 84;
 
-// Cuts a generated head (ash grey hair on purpose) into three layers the app recolors:
-// skin (tinted like the body), hair with brows (tinted with the hair color) and ink
-// (outlines and eyes, never tinted). Long hair below the chin is taken where the edit
-// turned the base's shoulders grey.
-export const splitHead = async (editPng, basePng) => {
+// Cuts a generated head (ash grey hair on purpose, magenta clothes) into three layers the app
+// recolors: skin (tinted like the body), hair with brows (tinted with the hair color) and ink
+// (outlines and eyes, never tinted). Below the chin only the grey hair is kept.
+// Eye boxes (body units) always go to ink: some variants draw light grey irises.
+const EYE_BOXES = [[79, 43, 94, 51.5], [102, 43, 117, 51.5]];
+
+export const splitHead = async (editPng) => {
   const edit = await rgba(await removeBackground(editPng));
-  const base = await rgba(basePng);
   const skin = Buffer.alloc(W * H * 4);
   const hair = Buffer.alloc(W * H * 4);
   const ink = Buffer.alloc(W * H * 4);
   const skinValues = [], hairValues = [];
 
+  // Grey pixels below the chin; only solid areas of them are hair (thin lines are the
+  // source body's outline and would not match the other bases' silhouettes).
+  const greyBelow = new Uint8Array(W * H);
+  for (let i = 0; i < W * H; i++) {
+    const [r, g, b] = [edit[i * 4], edit[i * 4 + 1], edit[i * 4 + 2]];
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    if (edit[i * 4 + 3] && max && (max - min) / max < 0.16 && lum(edit, i, 4) > 80) greyBelow[i] = 1;
+  }
+  const solid = (i) => {
+    const x = i % W, y = Math.floor(i / W);
+    let n = 0;
+    for (let dy = -3; dy <= 3; dy++) for (let dx = -3; dx <= 3; dx++) {
+      const xx = x + dx, yy = y + dy;
+      if (xx >= 0 && yy >= 0 && xx < W && yy < H) n += greyBelow[yy * W + xx];
+    }
+    return n >= 30; // of 49
+  };
+
   for (let i = 0; i < W * H; i++) {
     const [bx, by] = toBody(i % W, Math.floor(i / W));
-    if (edit[i * 4 + 3] === 0 || bx < 30 || bx > 165 || by > 200) continue;
+    if (edit[i * 4 + 3] === 0 || bx < 20 || bx > 175 || by > 260) continue;
     const [r, g, b] = [edit[i * 4], edit[i * 4 + 1], edit[i * 4 + 2]];
     const max = Math.max(r, g, b), min = Math.min(r, g, b);
     const saturation = max ? (max - min) / max : 0;
     const l = lum(edit, i, 4);
     const isHair = saturation < 0.16 && l > 55;
-    if (by > CHIN_Y) {
-      // Below the chin: only new grey hair over what used to be skin.
-      const changed = Math.max(...[0, 1, 2].map((c) => Math.abs(edit[i * 4 + c] - base[i * 4 + c]))) > 45;
-      if (!(isHair && changed && l > 90)) continue;
-    }
+    const inEye = EYE_BOXES.some(([x1, y1, x2, y2]) => bx >= x1 && bx <= x2 && by >= y1 && by <= y2);
+    if (by > CHIN_Y && !(greyBelow[i] && solid(i))) continue;
     const pixel = edit.subarray(i * 4, i * 4 + 4);
-    if (l < 55) ink.set(pixel, i * 4);
+    if (l < 55 || (inEye && saturation < 0.16)) ink.set(pixel, i * 4);
     else if (isHair) { hair.set(pixel, i * 4); hairValues.push(l); }
     else { skin.set(pixel, i * 4); if (saturation > 0.12 && l > 120) skinValues.push(l); }
   }

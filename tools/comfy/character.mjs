@@ -115,7 +115,15 @@ const commands = {
     const seeds = seedsFrom(args.seeds, "1,2,3");
     const cells = [];
     for (const [sex, def] of Object.entries(config.heads)) {
-      const image = await comfy.upload(await readFile(path.join(basesDir, `${def.from}.png`)), `character-${def.from}.png`);
+      // Heads are generated on a copy of the base in bright magenta clothes, so the grey hair
+      // separates cleanly from the clothes even where long hair falls over them.
+      const sourceFile = path.join(basesDir, `${sex}-head-source.png`);
+      if (!existsSync(sourceFile) || args.force) {
+        const from = await comfy.upload(await readFile(path.join(basesDir, `${def.source.from}.png`)), `character-${def.source.from}.png`);
+        await writeFile(sourceFile, await kleinEdit(comfy, from, def.source.prompt, def.source.seed, `body-maker/character/head-source-${sex}`));
+        console.log(`+ head source ${sex}`);
+      }
+      const image = await comfy.upload(await readFile(sourceFile), `character-${sex}-head-source.png`);
       const dir = path.join(variantsDir, "heads");
       await mkdir(dir, { recursive: true });
       for (const [style, prompt] of Object.entries(def.styles)) {
@@ -143,7 +151,7 @@ const commands = {
       const def = config.heads[sex];
       if (!def?.styles[style]) throw new Error(`Unknown head ${key}`);
       const edit = await readFile(path.join(variantsDir, "heads", `${key}-${seed}.png`));
-      const { skin, hair, ink, skinLum, hairLum } = await splitHead(edit, await readFile(path.join(basesDir, `${def.from}.png`)));
+      const { skin, hair, ink, skinLum, hairLum } = await splitHead(edit);
       const dir = path.join(outDir, "heads", key);
       await mkdir(dir, { recursive: true });
       await writeFile(path.join(dir, "skin.webp"), await toWebp(skin));
