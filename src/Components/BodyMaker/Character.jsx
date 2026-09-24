@@ -41,8 +41,8 @@ const RasterCharacter = ({ id, appearance, outfit }) => {
         const href = item ? layerUrl(item.id) : null;
         return { slot, item, href };
     });
-    const svgFallback = Object.fromEntries(layers.map(({ slot, item, href }) => [slot, item && !href ? item.look : null]));
-    if (!outfit.shorts) svgFallback.shorts = false; // raster underwear instead
+    // SVG pieces only for items without a layer; false keeps Outfit from drawing its default shorts.
+    const svgFallback = Object.fromEntries(layers.map(({ slot, item, href }) => [slot, item && !href ? item.look : false]));
 
     const draw = (slot) => layers.filter((l) => l.slot === slot && l.href).map(({ item, href }) => {
         const tint = item.tint ? `${id}-tint-${slot}` : undefined;

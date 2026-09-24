@@ -101,17 +101,22 @@ export const isSkinLike = (r, g, b) => {
 export const extractLayer = async (editPng, basePng, area, { cutBelowY = null, threshold = 14, softness = 22, dropSkin = true } = {}) => {
   const edit = await rgba(editPng);
   const base = await rgba(basePng);
+  const floor = new Uint8Array(W * H); // Klein's grey floor shadow on the white background
   for (let i = 0; i < W * H; i++) {
     const d = Math.max(...[0, 1, 2].map((c) => Math.abs(edit[i * 4 + c] - base[i * 4 + c])));
     let a = Math.min(1, Math.max(0, (d - threshold) / softness));
     if (area[i] < 128) a = 0;
     if (dropSkin && isSkinLike(edit[i * 4], edit[i * 4 + 1], edit[i * 4 + 2])) a = 0;
+    // Klein likes to add a soft grey floor shadow on the white background: drop it.
+    const baseIsBackground = base[i * 4] > 235 && base[i * 4 + 1] > 235 && base[i * 4 + 2] > 235;
+    const [r, g, b] = [edit[i * 4], edit[i * 4 + 1], edit[i * 4 + 2]];
+    if (baseIsBackground && Math.min(r, g, b) > 170 && Math.max(r, g, b) - Math.min(r, g, b) < 20) floor[i] = 1;
     if (cutBelowY !== null && toBody(0, Math.floor(i / W))[1] > cutBelowY) a = 0;
     edit[i * 4 + 3] = Math.round(a * 255);
   }
   // A light blur on alpha closes pinholes in flat areas where the edit matched the base by chance.
   const alpha = await sharp(edit, { raw: { width: W, height: H, channels: 4 } }).extractChannel(3).blur(1.2).raw().toBuffer();
-  for (let i = 0; i < W * H; i++) edit[i * 4 + 3] = alpha[i] > 60 ? Math.min(255, alpha[i] * 1.6) : 0;
+  for (let i = 0; i < W * H; i++) edit[i * 4 + 3] = alpha[i] > 60 && !floor[i] ? Math.min(255, alpha[i] * 1.6) : 0;
   return toPng(edit);
 };
 
