@@ -1,5 +1,5 @@
 import React from "react";
-import {BrowserRouter, Link, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Link, Route, Routes} from "react-router";
 
 import Layout from "./Containers/Layout/Layout";
 import {BodyMaker} from "./Components/BodyMaker";
@@ -13,18 +13,12 @@ const App = () => {
     return (
         <BrowserRouter>
             <Layout>
-                <Switch>
-                    <Route exact path="/body-maker">
-                        <BodyMaker/>
-                    </Route>
-                    <Route exact path="/my-awards">
-                        <MyAwards/>
-                    </Route>
-                    <Route exact path="/cloakroom">
-                        <Cloakroom/>
-                    </Route>
+                <Routes>
+                    <Route path="/body-maker" element={<BodyMaker/>}/>
+                    <Route path="/my-awards" element={<MyAwards/>}/>
+                    <Route path="/cloakroom" element={<Cloakroom/>}/>
 
-                    <Route path="/">
+                    <Route path="*" element={
                         <>
                             <h1>Страницы</h1>
                             <nav style={{fontSize: "2rem", display: "flex", flexDirection: "column"}}>
@@ -39,8 +33,8 @@ const App = () => {
                                 </Link>
                             </nav>
                         </>
-                    </Route>
-                </Switch>
+                    }/>
+                </Routes>
             </Layout>
         </BrowserRouter>
     );
