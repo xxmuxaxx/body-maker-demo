@@ -1,0 +1,89 @@
+.page {
+  max-width: 1015px;
+}
+
+.title {
+  margin: 0 0 24px 0;
+  font-weight: bold;
+  font-size: 24px;
+  line-height: 36px;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  margin: 0 0 16px 0;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.tiles {
+  margin-bottom: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
+
+.tile {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #383B3D;
+  border-radius: 8px;
+
+  span {
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    color: #717171;
+  }
+
+  b {
+    font-size: 28px;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+
+  th {
+    padding: 8px 12px;
+    font-weight: 500;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    text-align: left;
+    color: #717171;
+  }
+
+  td {
+    padding: 12px;
+    border-top: 1px solid #383B3D;
+  }
+}
+
+.booster {
+  color: #717171;
+}
+
+.win {
+  color: #96C83C;
+}
+
+.draw {
+  color: #E4CB6F;
+}
+
+.loss {
+  color: #E5484D;
+}
+
+.empty {
+  color: rgba(#ffffff, .6);
+
+  a {
+    color: #96C83C;
+  }
+}

@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./Radios.module.scss";
 
-const Radios = ({ label, name, items }) => {
+const Radios = ({ label, name, items, value, onChange }) => {
   return (
     <div className={styles.label}>
       {label && <p className={styles.text}>{label}</p>}
@@ -13,6 +13,8 @@ const Radios = ({ label, name, items }) => {
             type="radio"
             name={name}
             value={item.value}
+            checked={value === item.value}
+            onChange={onChange}
           />
           <span className={styles.radioBox}></span>
           <span className={styles.radioText}>{item.name}</span>

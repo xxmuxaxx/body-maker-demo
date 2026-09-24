@@ -1,146 +1,136 @@
 import React from "react";
+import {Link, NavLink, useNavigate} from "react-router";
 
 import logo from "../../assets/img/logo.svg";
-import head from "../../assets/img/head.png"
 import star1 from "../../assets/img/rank-star-1.png"
 import star2 from "../../assets/img/rank-star-2.png"
 import navIcon1 from "../../assets/img/nav-icon-1.png"
 import navIcon2 from "../../assets/img/nav-icon-2.png"
 import navIcon3 from "../../assets/img/nav-icon-3.png"
-import navIcon4 from "../../assets/img/nav-icon-4.png"
 import navIcon5 from "../../assets/img/nav-icon-5.png"
 import navIcon6 from "../../assets/img/nav-icon-6.png"
 
 import styles from "./Panel.module.scss";
 import Button from "../utils/Button/Button";
+import {Head} from "../BodyMaker";
+import {useGameStore} from "../../store/gameStore";
+import {ranks} from "../../game/catalog";
+import {rankProgress} from "../../game/ranks";
+import {GIFT_PRICE} from "../../game/rewards";
+import {plural} from "../../utils/plural";
+
+const formatNumber = (value) => value.toLocaleString("ru-RU");
+
+const NavItem = ({to, icon, name, label}) => (
+    <NavLink to={to} className={({isActive}) => `${styles.link} ${isActive ? styles.linkActive : ""}`}>
+        <img src={icon} className={styles.linkIcon} alt=""/>
+        <span className={styles.linkName}>{name}</span>
+        {label ? <span className={styles.linkLabel}>{label}</span> : null}
+    </NavLink>
+);
 
 const Panel = () => {
+    const navigate = useNavigate();
+    const profile = useGameStore((state) => state.profile);
+    const record = useGameStore((state) => state.record);
+    const xp = useGameStore((state) => state.xp);
+    const coins = useGameStore((state) => state.coins);
+    const gifts = useGameStore((state) => state.gifts);
+    const statPoints = useGameStore((state) => state.statPoints);
+    const newItems = useGameStore((state) => state.inventory.filter((entry) => entry.isNew).length);
+    const buyGift = useGameStore((state) => state.buyGift);
+    const reset = useGameStore((state) => state.reset);
+
+    const rank = rankProgress(xp);
+    const games = record.wins + record.draws + record.losses;
+    const share = (value) => `${games ? Math.round((value / games) * 100) : 0}%`;
+    const stats = [
+        {name: "Побед", value: record.wins},
+        {name: "Ничьих", value: record.draws},
+        {name: "Поражений", value: record.losses},
+    ];
+
+    const cloakroomLabel = statPoints > 0
+        ? `+${statPoints} ${plural(statPoints, "очко", "очка", "очков")}`
+        : newItems > 0 ? `+${newItems}` : null;
+
+    const onReset = () => {
+        if (window.confirm("Начать заново? Весь прогресс будет удалён.")) {
+            reset();
+            navigate("/");
+        }
+    };
+
     return (
         <div className={styles.wrapper}>
-            <a href="/" className={styles.logo}>
+            <Link to="/" className={styles.logo}>
                 <img src={logo} alt="logo"/>
-            </a>
+            </Link>
             <div className={styles.infoWrapper}>
-                <div className={styles.infoLeft}>
-                    <img src={head} className={styles.infoAvatar} alt="head"/>
-                    <p className={styles.infoName}>Richard Braveheart</p>
-                </div>
+                <Link to="/body-maker" className={styles.infoLeft} title="Изменить внешность">
+                    <div className={styles.infoAvatar}>
+                        <Head {...profile.appearance}/>
+                    </div>
+                    <p className={styles.infoName}>{profile.nickname || "Новый игрок"}</p>
+                </Link>
                 <div className={styles.infoRight}>
                     <ul className={styles.infoList}>
-                        <li className={styles.infoListItem}>
-                            <div className={styles.infoStats}>
-                                <span className={styles.infoStatsName}>Побед</span>
-                                <span className={styles.infoStatsValue}>24</span>
-                            </div>
-                            <div className={styles.infoBar}>
-                                <span className={styles.infoBarLine} style={{width: '80%'}}></span>
-                            </div>
-                        </li>
-                        <li className={styles.infoListItem}>
-                            <div className={styles.infoStats}>
-                                <span className={styles.infoStatsName}>Ничьих</span>
-                                <span className={styles.infoStatsValue}>8</span>
-                            </div>
-                            <div className={styles.infoBar}>
-                                <span className={styles.infoBarLine} style={{width: '20%'}}></span>
-                            </div>
-                        </li>
-                        <li className={styles.infoListItem}>
-                            <div className={styles.infoStats}>
-                                <span className={styles.infoStatsName}>Проигрышей</span>
-                                <span className={styles.infoStatsValue}>8</span>
-                            </div>
-                            <div className={styles.infoBar}>
-                                <span className={styles.infoBarLine} style={{width: '20%'}}></span>
-                            </div>
-                        </li>
+                        {stats.map((stat) => (
+                            <li className={styles.infoListItem} key={stat.name}>
+                                <div className={styles.infoStats}>
+                                    <span className={styles.infoStatsName}>{stat.name}</span>
+                                    <span className={styles.infoStatsValue}>{stat.value}</span>
+                                </div>
+                                <div className={styles.infoBar}>
+                                    <span className={styles.infoBarLine} style={{width: share(stat.value)}}></span>
+                                </div>
+                            </li>
+                        ))}
                     </ul>
                     <div className={styles.rankWrapper}>
-                        <p className={styles.rankName}>Новичек</p>
+                        <p className={styles.rankName}>{rank.current.name}</p>
                         <div className={styles.rankStars}>
-                            <img src={star1} className={styles.rankStar} alt="star"/>
-                            <img src={star2} className={styles.rankStar} alt="star"/>
-                            <img src={star2} className={styles.rankStar} alt="star"/>
-                            <img src={star2} className={styles.rankStar} alt="star"/>
-                            <img src={star2} className={styles.rankStar} alt="star"/>
+                            {ranks.map((r, index) => (
+                                <img key={r.name} src={index <= rank.index ? star1 : star2}
+                                     className={styles.rankStar} alt="" title={r.name}/>
+                            ))}
                         </div>
                     </div>
                 </div>
             </div>
             <div className={styles.experience}>
                 <div className={styles.experienceTop}>
-                    <span className={styles.experienceFrom}>0</span>
-                    <span className={styles.experienceCurrent} style={{left: '40%'}}>324 очка</span>
-                    <span className={styles.experienceTo}>1 000</span>
+                    <span className={styles.experienceFrom}>{formatNumber(rank.current.minXp)}</span>
+                    <span className={styles.experienceCurrent}
+                          style={{left: `${Math.min(Math.max(rank.percent, 20), 80)}%`}}>
+                        {formatNumber(xp)} {plural(xp, "очко", "очка", "очков")}
+                    </span>
+                    <span className={styles.experienceTo}>{rank.next ? formatNumber(rank.next.minXp) : "∞"}</span>
                 </div>
                 <div className={styles.experienceBar}>
-                    <span className={styles.experienceBarLine} style={{width: '40%'}}></span>
+                    <span className={styles.experienceBarLine} style={{width: `${rank.percent}%`}}></span>
                 </div>
                 <div className={styles.experienceBottom}>
-                    <span className={styles.experienceRankFrom}>Новичек</span>
-                    <span className={styles.experienceRankTo}>Эксперт</span>
+                    <span className={styles.experienceRankFrom}>{rank.current.name}</span>
+                    <span className={styles.experienceRankTo}>{rank.next ? rank.next.name : "Максимум"}</span>
                 </div>
             </div>
             <div className={styles.balanceWrapper}>
-                <p className={styles.balance}>балланс: <b>5 047 ₽</b></p>
-                <Button grayBorder>Пополнить</Button>
+                <p className={styles.balance}>монеты: <b>{formatNumber(coins)}</b></p>
+                <Button grayBorder onClick={buyGift} disabled={coins < GIFT_PRICE}>
+                    Купить подарок за {GIFT_PRICE}
+                </Button>
             </div>
             <nav className={styles.nav}>
-                <a href="/" className={styles.link}>
-                    <img src={navIcon1} className={styles.linkIcon} alt="nav"/>
-                    <span className={styles.linkName}>Моя коллекция</span>
-                    <span className={styles.linkLabel}>+2</span>
-                </a>
-                <a href="/" className={styles.link}>
-                    <img src={navIcon2} className={styles.linkIcon} alt="nav"/>
-                    <span className={styles.linkName}>Харатеристики</span>
-                    <span className={styles.linkLabel}>+20</span>
-                </a>
-                <a href="/" className={`${styles.link} ${styles.linkActive}`}>
-                    <img src={navIcon3} className={styles.linkIcon} alt="nav"/>
-                    <span className={styles.linkName}>Мои поединки</span>
-                    <span className={styles.linkLabel}>3 активных</span>
-                </a>
-                <a href="/" className={styles.link}>
-                    <img src={navIcon4} className={styles.linkIcon} alt="nav"/>
-                    <span className={styles.linkName}>Советы тренера</span>
-                    <span className={styles.linkLabel}>Есть новый!</span>
-                </a>
-                <a href="/" className={styles.link}>
-                    <img src={navIcon5} className={styles.linkIcon} alt="nav"/>
-                    <span className={styles.linkName}>Статистика</span>
-                </a>
-                <a href="/" className={styles.link}>
-                    <img src={navIcon6} className={styles.linkIcon} alt="nav"/>
-                    <span className={styles.linkName}>Мои награды</span>
-                    <span className={styles.linkLabel}>+20</span>
-                </a>
+                <NavItem to="/match" icon={navIcon3} name="Поединки" label="Играть!"/>
+                <NavItem to="/cloakroom" icon={navIcon1} name="Раздевалка" label={cloakroomLabel}/>
+                <NavItem to="/my-awards" icon={navIcon6} name="Мои награды" label={gifts > 0 ? `+${gifts}` : null}/>
+                <NavItem to="/body-maker" icon={navIcon2} name="Внешность"/>
+                <NavItem to="/stats" icon={navIcon5} name="Статистика"/>
             </nav>
 
-            {/*<div className={styles.text}>*/}
-            {/*  <p>*/}
-            {/*    <b>Здравствуй, Константин!</b>*/}
-            {/*    <span>Начни удивительное путешествие в мир футбола!</span>*/}
-            {/*  </p>*/}
-
-            {/*  <p>*/}
-            {/*    <b>История</b>*/}
-            {/*    <span>*/}
-            {/*      Ты юниор, только что получивший контракт от крупного клуба. Ты готов*/}
-            {/*      стать настоящим профи и разбогатеть, но сначала тебе придётся*/}
-            {/*      доказать что ты этого достоин — оттачивай свои характеристики и*/}
-            {/*      обзаведись новым гардеробом, не помешает и немного интуиции.{" "}*/}
-            {/*    </span>*/}
-            {/*  </p>*/}
-
-            {/*  <p>*/}
-            {/*    <b>С чего начать</b>*/}
-            {/*    <span>Задайте параметры своего персонажа справа.</span>*/}
-            {/*  </p>*/}
-            {/*</div>*/}
-
             <div className={styles.actions}>
-                <button className={styles.exit}>
+                <button type="button" className={styles.exit} onClick={onReset}>
                     <svg
                         width="20"
                         height="20"
@@ -157,7 +147,7 @@ const Panel = () => {
                             fill="white"
                         />
                     </svg>
-                    Выход
+                    Начать заново
                 </button>
             </div>
         </div>

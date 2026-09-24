@@ -2,14 +2,18 @@ import React from 'react'
 
 import styles from "./Button.module.scss";
 
-const Button = ({onClick, children, grayBorder}) => {
+const Button = ({onClick, children, grayBorder, filled, disabled, className}) => {
     const cls = [
         styles.button,
         grayBorder && styles.grayBorder,
+        filled && styles.filled,
+        className,
     ]
 
     return (
-        <button className={cls.join(' ')} onClick={onClick}>{children}</button>
+        <button type="button" className={cls.filter(Boolean).join(' ')} onClick={onClick} disabled={disabled}>
+            {children}
+        </button>
     )
 }
 

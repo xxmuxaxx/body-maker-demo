@@ -1,0 +1,17 @@
+[
+  {"id": "training-shirt", "slot": "shirt", "rarity": "common", "title": "Тренировочная футболка", "img": "shirt2.svg", "overlay": "shirt2.svg", "stats": {"attack": 0, "defense": 1, "agility": 1}},
+  {"id": "england-shirt", "slot": "shirt", "rarity": "common", "title": "Футболка сборной Англии 2016-2017", "img": "item-1.png", "overlay": "shirt1.svg", "stats": {"attack": 0, "defense": 1, "agility": 2}},
+  {"id": "saudi-shirt", "slot": "shirt", "rarity": "rare", "title": "Футболка сборной Саудовской Аравии 2020-2021", "img": "item-3.png", "overlay": "shirt1.svg", "stats": {"attack": 1, "defense": 2, "agility": 2}},
+  {"id": "club-shirt", "slot": "shirt", "rarity": "rare", "title": "Фирменная футболка клуба", "img": "shirt1.svg", "overlay": "shirt1.svg", "stats": {"attack": 2, "defense": 2, "agility": 1}},
+  {"id": "captain-shirt", "slot": "shirt", "rarity": "epic", "title": "Капитанская футболка", "img": "shirt2.svg", "overlay": "shirt2.svg", "stats": {"attack": 3, "defense": 3, "agility": 2}},
+  {"id": "training-shorts", "slot": "shorts", "rarity": "common", "title": "Тренировочные шорты", "img": "item-2.png", "color": "#4AA23D", "stats": {"attack": 0, "defense": 0, "agility": 1}},
+  {"id": "portugal-shorts", "slot": "shorts", "rarity": "common", "title": "Шорты сборной Португалии 2016-2017", "img": "item-2.png", "color": "#2E7D32", "stats": {"attack": 0, "defense": 1, "agility": 1}},
+  {"id": "brazil-shorts", "slot": "shorts", "rarity": "rare", "title": "Шорты сборной Бразилии 2016-2017", "img": "item-4.png", "color": "#F9D34B", "stats": {"attack": 1, "defense": 1, "agility": 2}},
+  {"id": "lightning-shorts", "slot": "shorts", "rarity": "epic", "title": "Шорты «Молния»", "color": "#1A00B8", "stats": {"attack": 2, "defense": 2, "agility": 3}},
+  {"id": "studs-boots", "slot": "boots", "rarity": "common", "title": "Бутсы-шиповки", "stats": {"attack": 1, "defense": 0, "agility": 1}},
+  {"id": "speed-boots", "slot": "boots", "rarity": "rare", "title": "Бутсы «Скорость»", "stats": {"attack": 2, "defense": 0, "agility": 2}},
+  {"id": "golden-boots", "slot": "boots", "rarity": "epic", "title": "Золотые бутсы", "stats": {"attack": 4, "defense": 0, "agility": 2}},
+  {"id": "keeper-gloves", "slot": "gloves", "rarity": "common", "title": "Вратарские перчатки", "stats": {"attack": 0, "defense": 1, "agility": 1}},
+  {"id": "grip-gloves", "slot": "gloves", "rarity": "rare", "title": "Перчатки «Цепкие»", "stats": {"attack": 0, "defense": 2, "agility": 2}},
+  {"id": "wall-gloves", "slot": "gloves", "rarity": "epic", "title": "Перчатки «Стена»", "stats": {"attack": 0, "defense": 4, "agility": 3}}
+]

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const CircularProgressBar = ({sqSize, percentage, strokeWidth, }) => {
+const CircularProgressBar = ({sqSize, percentage, strokeWidth, label}) => {
     const radius = (sqSize - strokeWidth) / 2;
     const viewBox = `0 0 ${sqSize} ${sqSize}`;
     const dashArray = radius * Math.PI * 2;
@@ -35,7 +35,7 @@ const CircularProgressBar = ({sqSize, percentage, strokeWidth, }) => {
                 y="50%"
                 dy=".3em"
                 textAnchor="middle">
-                {`${percentage}%`}
+                {label ?? `${percentage}%`}
             </text>
             <defs>
                 <linearGradient id="MyGradient" x1="0" x2="1" y1="0" y2="1">

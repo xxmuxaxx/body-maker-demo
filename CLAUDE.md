@@ -8,23 +8,33 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn build`: production build to `dist/`
 - `yarn preview`: serve the built `dist/`
 - `yarn lint`: ESLint (flat config in `eslint.config.js`)
+- `yarn test`: Vitest, run once (`npx vitest run src/game/penalty.test.js` for a single file)
 
-There is no test suite. To verify a change, run `yarn lint && yarn build` and check the page in the browser.
+To verify a change, run `yarn lint && yarn test && yarn build` and check the page in the browser.
 
 ## Architecture
 
-This is a frontend-only React 19 demo built with Vite. It has no backend, and all data is hardcoded in the components. UI text is in Russian.
+This is a frontend-only React 19 mini-game built with Vite. It has no backend. The player's progress is a zustand store persisted to localStorage. UI text is in Russian.
 
-- `index.html` is the Vite entry and loads `src/main.jsx`, which mounts `App`.
-- `src/App.jsx` sets up routing with `react-router` (v7+ API: `Routes`/`Route element={...}`, imported from `"react-router"`, not `react-router-dom`). Every route renders inside `Containers/Layout`, which shows the left `Components/Panel` sidebar next to the page content.
-- The routes are `/body-maker` (`Components/BodyMaker`), `/my-awards` (`Components/MyAwards`), `/cloakroom` (`Containers/Cloakroom`), and a catch-all index page with links.
-- `Components/BodyMaker`: the character is inline SVG (`Head.jsx`, `Body.jsx`). Colors and visibility of the hair, beard and brows are React state in `BodyMaker.jsx`, passed down as props.
-- `Components/Gift/Gifts.jsx` animates with `@react-spring/web`. It uses the imperative API: `useSpring(() => ...)` returns `[styles, api]`, and you animate with `api.start({...})`.
-- Shared form controls live in `Components/utils/` (Button, Input, Radios).
+The code is split into three layers:
+- `src/data/*.json` holds the content catalogs: items, opponents, boosters and ranks. Images are referenced by file name and resolved with `imageUrl()` from `src/data/images.js`, which uses `import.meta.glob` over `src/assets/img/`.
+- `src/game/` holds pure logic with no React. `catalog.js` indexes the JSON. `penalty.js` implements the shootout: it has a match state machine, the hit/miss/save chances, and the opponent AI. `rewards.js` covers match rewards and gift rolls, `ranks.js` maps XP to ranks, and `stats.js` computes effective stats (base + allocated points + equipped items + booster). Randomness is always injected as an `rng` function. Tests pass a seeded `createRng(seed)` from `rng.js`, and the UI passes `Math.random`.
+- `src/store/gameStore.js` holds the persisted state (profile, xp, coins, record, inventory, equipped, boosters, gifts, history) and its actions (`equip`, `openGift`, `finishMatch`, `allocatePoint`, `reset`, etc.). Inventory entries are `{ uid, itemId, isNew }`, and `equipped` maps a slot to a uid. If you change the persisted shape, bump `version` in the persist options and add a `migrate`.
+
+Routing is in `src/App.jsx` and uses `react-router` (v7+ API, imported from `"react-router"`). Every route renders inside `Containers/Layout`, which shows the data-driven `Components/Panel` sidebar.
+- `/`: `Containers/Home`, onboarding or a to-do list
+- `/body-maker`: `Components/BodyMaker`, which saves the appearance to the store
+- `/cloakroom`: `Containers/Cloakroom`, equipment slots over the SVG body, `ClothesModal`, and `PointsPanel` for stat points
+- `/my-awards`: `Components/MyAwards`, with gifts (animated by `Gift/Gifts.jsx` using `@react-spring/web` `api.start`), boosters and the collection
+- `/match` and `/match/:opponentId?booster=id`: `Containers/Match`, the opponent list and the shootout screen
+- `/stats`: `Containers/Stats`
+
+The character is inline SVG (`BodyMaker/Head.jsx`, `Body.jsx`), colored by props. Shorts color comes from the item's `color`. The shirt is an image overlay taken from the item's `overlay`.
 
 ## Conventions
 
 - Components are `.jsx` function components with default exports. `BodyMaker/index.jsx` re-exports its parts as named exports.
 - Styles are Sass CSS Modules next to each component (`Name.module.scss`), imported as `styles`. Global styles and the Montserrat font import are in `src/app.scss`, and `normalize.css` is imported in `App.jsx`.
-- Images are imported from `src/assets/img/` as URLs.
+- In components, images are imported from `src/assets/img/` as URLs. Data files use file names instead (see above).
+- Russian plurals go through `src/utils/plural.js`.
 - Package manager: Yarn 1 (`yarn.lock`).

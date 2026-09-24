@@ -1,0 +1,5 @@
+[
+  { "id": "coach", "title": "Бустер от тренера", "description": "+3 к нападению на один поединок", "img": "booster-img-1.png", "effect": { "attack": 3 } },
+  { "id": "energy", "title": "Энергетик", "description": "+3 к ловкости на один поединок", "img": "booster-img-2.png", "effect": { "agility": 3 } },
+  { "id": "focus", "title": "Установка на игру", "description": "+3 к защите на один поединок", "img": "booster-img-1.png", "effect": { "defense": 3 } }
+]

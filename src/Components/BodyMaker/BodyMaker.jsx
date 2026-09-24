@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
 
 import Head from "./Head";
 import Body from "./Body";
@@ -7,23 +8,46 @@ import Radios from "../utils/Radios/Radios";
 
 import styles from "./index.module.scss";
 import BodyChangeColor from "./BodyChangeColor";
+import { useGameStore } from "../../store/gameStore";
 
 const BodyMaker = () => {
-  const [bodyColor, setBodyColor] = useState("#EDC4B0");
-  const [hairColor, setHairColor] = useState("#492B15");
-  const [showHair, setShowHair] = useState(true);
-  const [beardColor, setBeardColor] = useState("#492B15");
-  const [showBeard, setShowBeard] = useState(true);
-  const [browsColor, setBrowsColor] = useState("#492B15");
-  const [showBrows, setShowBrows] = useState(true);
-  const [eyesColor, setEyesColor] = useState("#492B15");
-  const [mouthColor, setMouthColor] = useState("#D9A191");
+  const navigate = useNavigate();
+  const profile = useGameStore((state) => state.profile);
+  const saveProfile = useGameStore((state) => state.saveProfile);
+
+  const [nickname, setNickname] = useState(profile.nickname);
+  const [sex, setSex] = useState(profile.sex);
+  const [bodyType, setBodyType] = useState(profile.bodyType);
+  const [appearance, setAppearance] = useState(profile.appearance);
+  const [saved, setSaved] = useState(false);
+
+  const update = (key) => (event) => {
+    const value = event.target.type === "checkbox" ? event.target.checked : event.target.value;
+    setAppearance((old) => ({ ...old, [key]: value }));
+    setSaved(false);
+  };
+
+  const onSave = () => {
+    const isFirstSave = !profile.created;
+    saveProfile({ nickname: nickname.trim() || "Игрок", sex, bodyType, appearance });
+    if (isFirstSave) {
+      navigate("/cloakroom");
+    } else {
+      setSaved(true);
+    }
+  };
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.panel}>
         <div className={styles.block}>
-          <Input label="Ваш никнейм" />
+          <Input
+            label="Ваш никнейм"
+            value={nickname}
+            maxLength={24}
+            placeholder="Например, Richard Braveheart"
+            onChange={(event) => setNickname(event.target.value)}
+          />
         </div>
 
         <div className={styles.block}>
@@ -33,6 +57,8 @@ const BodyMaker = () => {
             <Radios
               label="Пол"
               name="sex"
+              value={sex}
+              onChange={(event) => setSex(event.target.value)}
               items={[
                 { value: "man", name: "мужской" },
                 { value: "woman", name: "женский" },
@@ -44,6 +70,8 @@ const BodyMaker = () => {
             <Radios
               label="Телосложение"
               name="body-type"
+              value={bodyType}
+              onChange={(event) => setBodyType(event.target.value)}
               items={[
                 { value: "1", name: "мезоморф" },
                 { value: "2", name: "эктоморф" },
@@ -67,8 +95,8 @@ const BodyMaker = () => {
                 { value: "#1A00B8" },
                 { value: "#C406C8" },
               ]}
-              defaultValue={bodyColor}
-              onChange={(event) => setBodyColor(event.target.value)}
+              defaultValue={appearance.bodyColor}
+              onChange={update("bodyColor")}
             />
           </div>
 
@@ -87,10 +115,10 @@ const BodyMaker = () => {
                 { value: "#1A00B8" },
                 { value: "#C406C8" },
               ]}
-              defaultValue={hairColor}
-              checked={showHair}
-              onCheck={(event) => setShowHair(event.target.checked)}
-              onChange={(event) => setHairColor(event.target.value)}
+              defaultValue={appearance.hairColor}
+              checked={appearance.showHair}
+              onCheck={update("showHair")}
+              onChange={update("hairColor")}
             />
           </div>
 
@@ -109,10 +137,10 @@ const BodyMaker = () => {
                 { value: "#1A00B8" },
                 { value: "#C406C8" },
               ]}
-              defaultValue={browsColor}
-              checked={showBrows}
-              onCheck={(event) => setShowBrows(event.target.checked)}
-              onChange={(event) => setBrowsColor(event.target.value)}
+              defaultValue={appearance.browsColor}
+              checked={appearance.showBrows}
+              onCheck={update("showBrows")}
+              onChange={update("browsColor")}
             />
           </div>
 
@@ -131,10 +159,10 @@ const BodyMaker = () => {
                 { value: "#1A00B8" },
                 { value: "#C406C8" },
               ]}
-              defaultValue={beardColor}
-              checked={showBeard}
-              onCheck={(event) => setShowBeard(event.target.checked)}
-              onChange={(event) => setBeardColor(event.target.value)}
+              defaultValue={appearance.beardColor}
+              checked={appearance.showBeard}
+              onCheck={update("showBeard")}
+              onChange={update("beardColor")}
             />
           </div>
 
@@ -153,15 +181,15 @@ const BodyMaker = () => {
                 { value: "#1A00B8" },
                 { value: "#C406C8" },
               ]}
-              defaultValue={eyesColor}
-              onChange={(event) => setEyesColor(event.target.value)}
+              defaultValue={appearance.eyesColor}
+              onChange={update("eyesColor")}
             />
           </div>
 
           <div className={styles.blockGroup}>
             <BodyChangeColor
               label="Губы"
-              name="eyes-color"
+              name="mouth-color"
               items={[
                 { value: "#202324" },
                 { value: "#D9A191" },
@@ -173,30 +201,20 @@ const BodyMaker = () => {
                 { value: "#00CFDC" },
                 { value: "#C406C8" },
               ]}
-              defaultValue={mouthColor}
-              onChange={(event) => setMouthColor(event.target.value)}
+              defaultValue={appearance.mouthColor}
+              onChange={update("mouthColor")}
             />
           </div>
 
-          <button className={styles.save} type="button">
-            Сохранить
+          <button className={styles.save} type="button" onClick={onSave}>
+            {profile.created ? (saved ? "Сохранено ✓" : "Сохранить") : "Сохранить и в раздевалку"}
           </button>
         </div>
       </div>
 
       <div className={styles.field}>
-        <Body bodyColor={bodyColor} />
-        <Head
-          bodyColor={bodyColor}
-          hairColor={hairColor}
-          showHair={showHair}
-          beardColor={beardColor}
-          showBeard={showBeard}
-          browsColor={browsColor}
-          showBrows={showBrows}
-          eyesColor={eyesColor}
-          mouthColor={mouthColor}
-        />
+        <Body bodyColor={appearance.bodyColor} />
+        <Head {...appearance} />
       </div>
     </div>
   );
