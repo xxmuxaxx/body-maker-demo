@@ -21,6 +21,7 @@ import {
 } from "../../game/penalty";
 import {STAT_KEYS, STAT_TITLES, computeStats} from "../../game/stats";
 import {useGameStore} from "../../store/gameStore";
+import {generatedArt} from "../../data/images";
 
 import styles from "./Match.module.scss";
 
@@ -158,7 +159,7 @@ const MatchScreen = ({opponent, initialBoosterId}) => {
                         <p className={styles.sideName}>{opponent.name}</p>
                         <KickDots kicks={kicksBy(match, "opponent")}/>
                     </div>
-                    <Portrait appearance={them.appearance} kit={them.kit} size={64}/>
+                    <Portrait appearance={them.appearance} art={generatedArt("opponents", opponent.id)} kit={them.kit} size={64}/>
                 </div>
             </div>
 

@@ -9,6 +9,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn preview`: serve the built `dist/`
 - `yarn lint`: ESLint (flat config in `eslint.config.js`)
 - `yarn test`: Vitest, run once (`npx vitest run src/game/penalty.test.js` for a single file)
+- `yarn gen:art`: generate art with ComfyUI (needs `COMFY_URL`, optional `COMFY_AUTH=user:pass`). See `tools/comfy/generate.mjs` for options.
 
 To verify a change, run `yarn lint && yarn test && yarn build` and check the page in the browser.
 
@@ -28,6 +29,8 @@ Routing is in `src/App.jsx` and uses `react-router` (v7+ API, imported from `"re
 - `/my-awards`: `Components/MyAwards`, with gifts (animated by `Gift/Gifts.jsx` using `@react-spring/web` `api.start`), boosters and the collection
 - `/match` and `/match/:opponentId?booster=id`: `Containers/Match`, the opponent list and the shootout screen
 - `/stats`: `Containers/Stats`
+
+Generated art lives in `src/assets/gen/<kind>/<id>.webp` (kind = items, boosters, opponents). `artUrl(kind, entry)` from `src/data/images.js` prefers it over the entry's `img`, and opponent portraits use it instead of the SVG head. The pipeline is in `tools/comfy/`: `subjects.json` has English prompts per catalog id (every catalog entry needs one; a test checks this), `style.json` has the per-kind style, `workflows/txt2img.json` is the API-format workflow with `{{placeholders}}`, and `postprocess.mjs` cuts out the white background with sharp. Never commit ComfyUI credentials.
 
 The character is inline SVG (`BodyMaker/Head.jsx`, `Body.jsx`), colored by props. Shorts color comes from the item's `color`. The shirt is an image overlay taken from the item's `overlay`.
 

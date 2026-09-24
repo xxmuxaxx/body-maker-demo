@@ -7,6 +7,7 @@ import {boosters, opponents, ranks} from "../../game/catalog";
 import {rankIndexForXp} from "../../game/ranks";
 import {STAT_KEYS, STAT_TITLES, computeStats} from "../../game/stats";
 import {useGameStore} from "../../store/gameStore";
+import {generatedArt} from "../../data/images";
 
 import styles from "./Match.module.scss";
 
@@ -73,7 +74,8 @@ const Opponents = () => {
                     const locked = opponent.minRank > rankIndex;
                     return (
                         <div key={opponent.id} className={`${styles.opponent} ${locked ? styles.opponentLocked : ""}`}>
-                            <Portrait appearance={opponent.appearance} kit={opponent.kit}/>
+                            <Portrait appearance={opponent.appearance} art={generatedArt("opponents", opponent.id)}
+                                      kit={opponent.kit}/>
                             <p className={styles.opponentName}>{opponent.name}</p>
                             <p className={styles.opponentDescription}>{opponent.description}</p>
                             <ul className={styles.opponentStats}>
