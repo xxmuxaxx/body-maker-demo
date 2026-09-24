@@ -12,8 +12,7 @@ import navIcon6 from "../../assets/img/nav-icon-6.png"
 
 import styles from "./Panel.module.scss";
 import Button from "../utils/Button/Button";
-import {Head} from "../BodyMaker";
-import {hairStyleFor} from "../BodyMaker/characterLayers";
+import {HeadAvatar} from "../BodyMaker";
 import {useGameStore} from "../../store/gameStore";
 import {ranks} from "../../game/catalog";
 import {rankProgress} from "../../game/ranks";
@@ -70,7 +69,7 @@ const Panel = () => {
             <div className={styles.infoWrapper}>
                 <Link to="/body-maker" className={styles.infoLeft} title="Изменить внешность">
                     <div className={styles.infoAvatar}>
-                        <Head {...profile.appearance} hairStyle={hairStyleFor(profile.sex)}/>
+                        <HeadAvatar appearance={profile.appearance} sex={profile.sex}/>
                     </div>
                     <p className={styles.infoName}>{profile.nickname || "Новый игрок"}</p>
                 </Link>

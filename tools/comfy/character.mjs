@@ -18,7 +18,7 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
 import { createClient } from "./client.mjs";
-import { H, W, extractLayer, slotArea, splitBase, toWebp } from "./layers.mjs";
+import { H, W, extractLayer, slotArea, splitBase, splitHead, toWebp } from "./layers.mjs";
 import { fillWorkflow } from "./workflow.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -107,6 +107,52 @@ const commands = {
       }
     }
     await writeGrid(files, path.join(dir, "sheet.png"), [0, 0, W, H], 5);
+  },
+
+  // Generated heads (women): one Klein edit of the "from" base per hairstyle and seed.
+  async heads(args) {
+    const comfy = client();
+    const seeds = seedsFrom(args.seeds, "1,2,3");
+    const cells = [];
+    for (const [sex, def] of Object.entries(config.heads)) {
+      const image = await comfy.upload(await readFile(path.join(basesDir, `${def.from}.png`)), `character-${def.from}.png`);
+      const dir = path.join(variantsDir, "heads");
+      await mkdir(dir, { recursive: true });
+      for (const [style, prompt] of Object.entries(def.styles)) {
+        if (args.id && !args.id.split(",").includes(style)) continue;
+        for (const seed of seeds) {
+          const file = path.join(dir, `${sex}-${style}-${seed}.png`);
+          cells.push({ label: `${sex}-${style} #${seed}`, file });
+          if (existsSync(file) && !args.force) continue;
+          const started = Date.now();
+          await writeFile(file, await kleinEdit(comfy, image, prompt, seed, `body-maker/character/head-${sex}-${style}`));
+          console.log(`+ head ${sex}-${style} seed ${seed} (${((Date.now() - started) / 1000).toFixed(1)}s)`);
+        }
+      }
+    }
+    await writeGrid(cells, path.join(variantsDir, "heads", "sheet.png"), [120, 0, 400, 560], 6);
+  },
+
+  // pick-head woman-bun=2 ...: cut the chosen head into skin / hair / ink layers.
+  async "pick-head"(args) {
+    const manifest = await readManifest();
+    manifest.heads ??= {};
+    for (const choice of args._) {
+      const [key, seed] = choice.split("=");
+      const [sex, style] = key.split("-");
+      const def = config.heads[sex];
+      if (!def?.styles[style]) throw new Error(`Unknown head ${key}`);
+      const edit = await readFile(path.join(variantsDir, "heads", `${key}-${seed}.png`));
+      const { skin, hair, ink, skinLum, hairLum } = await splitHead(edit, await readFile(path.join(basesDir, `${def.from}.png`)));
+      const dir = path.join(outDir, "heads", key);
+      await mkdir(dir, { recursive: true });
+      await writeFile(path.join(dir, "skin.webp"), await toWebp(skin));
+      await writeFile(path.join(dir, "hair.webp"), await toWebp(hair));
+      await writeFile(path.join(dir, "ink.webp"), await toWebp(ink));
+      manifest.heads[key] = { seed: Number(seed), skinLum, hairLum };
+      console.log(`+ head ${key} (skin ${skinLum}, hair ${hairLum})`);
+    }
+    await writeManifest(manifest);
   },
 
   async "pick-base"(args) {

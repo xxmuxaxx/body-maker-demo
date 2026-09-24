@@ -4,7 +4,8 @@ import Body from "./Body";
 import Head from "./Head";
 import Outfit from "./Outfit";
 import { CHARACTER_CANVAS as C } from "./bodyPaths";
-import { baseInfo, baseKeyFor, hairStyleFor, hasRasterBody, layerUrl, tintMatrix } from "./characterLayers";
+import GeneratedHead from "./GeneratedHead";
+import { baseInfo, baseKeyFor, hairStyleFor, hasGeneratedHead, hasRasterBody, headKeyFor, layerUrl, tintMatrix } from "./characterLayers";
 
 import styles from "./index.module.scss";
 
@@ -35,7 +36,7 @@ const Layer = ({ href, filter }) => (
 
 // outfit: { shirt, shorts, boots, gloves }, each { id, look, tint? } or null.
 // tint recolors a neutral layer (the opponents' plain kit) to that color.
-const RasterCharacter = ({ id, baseKey, appearance, outfit, hairStyle }) => {
+const RasterCharacter = ({ id, baseKey, headKey, appearance, outfit, hairStyle }) => {
     const info = baseInfo(baseKey);
     const layers = SLOT_ORDER.map((slot) => {
         const item = outfit[slot];
@@ -71,9 +72,13 @@ const RasterCharacter = ({ id, baseKey, appearance, outfit, hairStyle }) => {
             <svg overflow="visible">
                 <Outfit {...svgFallback}/>
             </svg>
-            <g filter={`url(#${id}-ink)`}>
-                <Head {...appearance} hairStyle={hairStyle} className="" x={70} y={-5}/>
-            </g>
+            {hasGeneratedHead(headKey) ? (
+                <GeneratedHead id={id} headKey={headKey} appearance={appearance}/>
+            ) : (
+                <g filter={`url(#${id}-ink)`}>
+                    <Head {...appearance} hairStyle={hairStyle} className="" x={70} y={-5}/>
+                </g>
+            )}
         </>
     );
 };
@@ -85,6 +90,7 @@ const Character = ({ appearance, sex = "man", bodyType = "1", outfit = {}, class
     const id = useId();
     const baseKey = baseKeyFor(sex, bodyType);
     const hairStyle = hairStyleFor(sex);
+    const headKey = headKeyFor(sex, appearance);
     const looks = Object.fromEntries(Object.entries(outfit).map(([slot, item]) => [slot, item?.look ?? null]));
 
     return (
@@ -99,7 +105,7 @@ const Character = ({ appearance, sex = "man", bodyType = "1", outfit = {}, class
                 <InkFilter id={`${id}-ink`}/>
             </defs>
             {hasRasterBody(baseKey) ? (
-                <RasterCharacter id={id} baseKey={baseKey} appearance={appearance} outfit={outfit} hairStyle={hairStyle}/>
+                <RasterCharacter id={id} baseKey={baseKey} headKey={headKey} appearance={appearance} outfit={outfit} hairStyle={hairStyle}/>
             ) : (
                 <g filter={`url(#${id}-ink)`}>
                     <Body bodyColor={appearance.bodyColor} className="" x={0} y={0}>

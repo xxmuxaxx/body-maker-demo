@@ -63,5 +63,16 @@
       "from": "woman-1",
       "prompt": "Make the woman's build curvier and heavier (endomorph): wider hips and waist, a soft belly, thicker arms and legs. Keep the pose, arm and leg positions, the head, the grey sports top and shorts, the white background and the flat cartoon art style exactly unchanged."
     }
+  },
+  "heads": {
+    "woman": {
+      "from": "woman-1",
+      "styles": {
+        "bun": "Make her hair ash grey, tied in a neat bun on top of her head, with ash grey eyebrows. Keep her face shape, eyes, nose, mouth, expression, the pose, body, grey sports top and shorts, the white background and the flat cartoon art style exactly unchanged.",
+        "long": "Give her long straight loose ash grey hair that falls over her shoulders, with ash grey eyebrows. Keep her face shape, eyes, nose, mouth, expression, the pose, body, grey sports top and shorts, the white background and the flat cartoon art style exactly unchanged.",
+        "ponytail": "Give her ash grey hair pulled back into a high ponytail, with a few loose strands framing her face and ash grey eyebrows. Keep her face shape, eyes, nose, mouth, expression, the pose, body, grey sports top and shorts, the white background and the flat cartoon art style exactly unchanged.",
+        "bob": "Give her a chin-length ash grey bob haircut with side-swept bangs and ash grey eyebrows. Keep her face shape, eyes, nose, mouth, expression, the pose, body, grey sports top and shorts, the white background and the flat cartoon art style exactly unchanged."
+      }
+    }
   }
 }

@@ -139,3 +139,46 @@ export const extractLayer = async (editPng, basePng, area, { cutBelowY = null, t
 };
 
 export const toWebp = (png) => sharp(png).webp({ quality: 90, alphaQuality: 90 }).toBuffer();
+
+// Everything above this line (body units) belongs to the head; below it only hair is kept.
+export const CHIN_Y = 84;
+
+// Cuts a generated head (ash grey hair on purpose) into three layers the app recolors:
+// skin (tinted like the body), hair with brows (tinted with the hair color) and ink
+// (outlines and eyes, never tinted). Long hair below the chin is taken where the edit
+// turned the base's shoulders grey.
+export const splitHead = async (editPng, basePng) => {
+  const edit = await rgba(await removeBackground(editPng));
+  const base = await rgba(basePng);
+  const skin = Buffer.alloc(W * H * 4);
+  const hair = Buffer.alloc(W * H * 4);
+  const ink = Buffer.alloc(W * H * 4);
+  const skinValues = [], hairValues = [];
+
+  for (let i = 0; i < W * H; i++) {
+    const [bx, by] = toBody(i % W, Math.floor(i / W));
+    if (edit[i * 4 + 3] === 0 || bx < 30 || bx > 165 || by > 200) continue;
+    const [r, g, b] = [edit[i * 4], edit[i * 4 + 1], edit[i * 4 + 2]];
+    const max = Math.max(r, g, b), min = Math.min(r, g, b);
+    const saturation = max ? (max - min) / max : 0;
+    const l = lum(edit, i, 4);
+    const isHair = saturation < 0.16 && l > 55;
+    if (by > CHIN_Y) {
+      // Below the chin: only new grey hair over what used to be skin.
+      const changed = Math.max(...[0, 1, 2].map((c) => Math.abs(edit[i * 4 + c] - base[i * 4 + c]))) > 45;
+      if (!(isHair && changed && l > 90)) continue;
+    }
+    const pixel = edit.subarray(i * 4, i * 4 + 4);
+    if (l < 55) ink.set(pixel, i * 4);
+    else if (isHair) { hair.set(pixel, i * 4); hairValues.push(l); }
+    else { skin.set(pixel, i * 4); if (saturation > 0.12 && l > 120) skinValues.push(l); }
+  }
+  const percentile = (values, p) => values.sort((a, b) => a - b)[Math.floor(values.length * p)] ?? 200;
+  return {
+    skin: await toPng(skin),
+    hair: await toPng(hair),
+    ink: await toPng(ink),
+    skinLum: Math.round(percentile(skinValues, 0.5)),
+    hairLum: Math.round(percentile(hairValues, 0.9)),
+  };
+};

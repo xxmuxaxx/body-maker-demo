@@ -161,7 +161,7 @@ const MatchScreen = ({opponent, initialBoosterId}) => {
         <div className={styles.page}>
             <div className={styles.scoreboard}>
                 <div className={styles.side}>
-                    <Portrait appearance={me.appearance} kit={me.kit} size={64}/>
+                    <Portrait appearance={me.appearance} sex={me.sex} kit={me.kit} size={64}/>
                     <div>
                         <p className={styles.sideName}>{state.profile.nickname || "Ты"}</p>
                         <KickDots kicks={kicksBy(match, "player")}/>

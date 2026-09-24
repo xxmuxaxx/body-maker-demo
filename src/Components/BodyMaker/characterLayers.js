@@ -3,6 +3,7 @@
 // Everything here degrades gracefully: a base without files keeps the character pure SVG,
 // and an item without a layer falls back to its SVG outfit piece.
 const files = import.meta.glob("../../assets/character/*/*.webp", { eager: true, import: "default" });
+const headFiles = import.meta.glob("../../assets/character/heads/*/*.webp", { eager: true, import: "default" });
 const manifests = import.meta.glob("../../assets/character/manifest.json", { eager: true, import: "default" });
 
 const manifest = Object.values(manifests)[0] ?? null;
@@ -23,3 +24,23 @@ export const tintMatrix = (hex, refLum) => {
   const row = (k) => `${k * 0.299} ${k * 0.587} ${k * 0.114} 0 0`;
   return `${row(r)} ${row(g)} ${row(b)} 0 0 0 1 0`;
 };
+
+// Generated heads (women): skin / hair / ink layers per hairstyle, see tools/comfy/character.mjs.
+export const HAIRSTYLES = [
+  { value: "bun", name: "пучок" },
+  { value: "long", name: "длинные" },
+  { value: "ponytail", name: "хвост" },
+  { value: "bob", name: "каре" },
+];
+
+export const headKeyFor = (sex, appearance) =>
+  sex === "woman" ? `woman-${appearance?.femaleHair ?? "bun"}` : null;
+
+export const headInfo = (headKey) => (headKey ? manifest?.heads?.[headKey] ?? null : null);
+
+export const headUrl = (headKey, part) => headFiles[`../../assets/character/heads/${headKey}/${part}.webp`] ?? null;
+
+export const hasGeneratedHead = (headKey) => Boolean(headInfo(headKey) && headUrl(headKey, "skin"));
+
+export const availableHairstyles = (sex) =>
+  HAIRSTYLES.filter((style) => hasGeneratedHead(headKeyFor(sex, { femaleHair: style.value })));

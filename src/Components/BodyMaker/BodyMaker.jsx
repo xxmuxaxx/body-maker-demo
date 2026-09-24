@@ -9,6 +9,7 @@ import styles from "./index.module.scss";
 import BodyChangeColor from "./BodyChangeColor";
 import { useGameStore } from "../../store/gameStore";
 import { outfitItems } from "../../game/stats";
+import { availableHairstyles } from "./characterLayers";
 
 const BodyMaker = () => {
   const navigate = useNavigate();
@@ -28,6 +29,10 @@ const BodyMaker = () => {
     setAppearance((old) => ({ ...old, [key]: value }));
     setSaved(false);
   };
+
+  // Women get a generated head: a hairstyle choice instead of the SVG head's detail colors.
+  const hairstyles = sex === "woman" ? availableHairstyles("woman") : [];
+  const generatedHead = hairstyles.length > 0;
 
   const onSave = () => {
     const isFirstSave = !profile.created;
@@ -90,6 +95,18 @@ const BodyMaker = () => {
             />
           </div>
 
+          {generatedHead && (
+            <div className={styles.blockGroup}>
+              <Radios
+                label="Причёска"
+                name="hairstyle"
+                items={hairstyles}
+                value={appearance.femaleHair ?? "bun"}
+                onChange={update("femaleHair")}
+              />
+            </div>
+          )}
+
           <div className={styles.blockGroup}>
             <BodyChangeColor
               label="Цвет кожи"
@@ -127,94 +144,102 @@ const BodyMaker = () => {
               ]}
               defaultValue={appearance.hairColor}
               checked={appearance.showHair}
-              onCheck={update("showHair")}
+              onCheck={generatedHead ? undefined : update("showHair")}
               onChange={update("hairColor")}
             />
           </div>
 
-          <div className={styles.blockGroup}>
-            <BodyChangeColor
-              label="Брови"
-              name="brows-color"
-              items={[
-                { value: "#202324" },
-                { value: "#492B15" },
-                { value: "#C60000" },
-                { value: "#DE5D00" },
-                { value: "#CD9607" },
-                { value: "#05B517" },
-                { value: "#00CFDC" },
-                { value: "#1A00B8" },
-                { value: "#C406C8" },
-              ]}
-              defaultValue={appearance.browsColor}
-              checked={appearance.showBrows}
-              onCheck={update("showBrows")}
-              onChange={update("browsColor")}
-            />
-          </div>
+          {!generatedHead && (
+            <div className={styles.blockGroup}>
+              <BodyChangeColor
+                label="Брови"
+                name="brows-color"
+                items={[
+                  { value: "#202324" },
+                  { value: "#492B15" },
+                  { value: "#C60000" },
+                  { value: "#DE5D00" },
+                  { value: "#CD9607" },
+                  { value: "#05B517" },
+                  { value: "#00CFDC" },
+                  { value: "#1A00B8" },
+                  { value: "#C406C8" },
+                ]}
+                defaultValue={appearance.browsColor}
+                checked={appearance.showBrows}
+                onCheck={update("showBrows")}
+                onChange={update("browsColor")}
+              />
+            </div>
+          )}
 
-          <div className={styles.blockGroup}>
-            <BodyChangeColor
-              label="Борода"
-              name="beard-color"
-              items={[
-                { value: "#202324" },
-                { value: "#492B15" },
-                { value: "#C60000" },
-                { value: "#DE5D00" },
-                { value: "#CD9607" },
-                { value: "#05B517" },
-                { value: "#00CFDC" },
-                { value: "#1A00B8" },
-                { value: "#C406C8" },
-              ]}
-              defaultValue={appearance.beardColor}
-              checked={appearance.showBeard}
-              onCheck={update("showBeard")}
-              onChange={update("beardColor")}
-            />
-          </div>
+          {!generatedHead && (
+            <div className={styles.blockGroup}>
+              <BodyChangeColor
+                label="Борода"
+                name="beard-color"
+                items={[
+                  { value: "#202324" },
+                  { value: "#492B15" },
+                  { value: "#C60000" },
+                  { value: "#DE5D00" },
+                  { value: "#CD9607" },
+                  { value: "#05B517" },
+                  { value: "#00CFDC" },
+                  { value: "#1A00B8" },
+                  { value: "#C406C8" },
+                ]}
+                defaultValue={appearance.beardColor}
+                checked={appearance.showBeard}
+                onCheck={update("showBeard")}
+                onChange={update("beardColor")}
+              />
+            </div>
+          )}
 
-          <div className={styles.blockGroup}>
-            <BodyChangeColor
-              label="Глаза"
-              name="eyes-color"
-              items={[
-                { value: "#202324" },
-                { value: "#492B15" },
-                { value: "#C60000" },
-                { value: "#DE5D00" },
-                { value: "#CD9607" },
-                { value: "#05B517" },
-                { value: "#00CFDC" },
-                { value: "#1A00B8" },
-                { value: "#C406C8" },
-              ]}
-              defaultValue={appearance.eyesColor}
-              onChange={update("eyesColor")}
-            />
-          </div>
+          {!generatedHead && (
+            <div className={styles.blockGroup}>
+              <BodyChangeColor
+                label="Глаза"
+                name="eyes-color"
+                items={[
+                  { value: "#202324" },
+                  { value: "#492B15" },
+                  { value: "#C60000" },
+                  { value: "#DE5D00" },
+                  { value: "#CD9607" },
+                  { value: "#05B517" },
+                  { value: "#00CFDC" },
+                  { value: "#1A00B8" },
+                  { value: "#C406C8" },
+                ]}
+                defaultValue={appearance.eyesColor}
+                onChange={update("eyesColor")}
+              />
+            </div>
+          )}
 
-          <div className={styles.blockGroup}>
-            <BodyChangeColor
-              label="Губы"
-              name="mouth-color"
-              items={[
-                { value: "#202324" },
-                { value: "#D9A191" },
-                { value: "#703001" },
-                { value: "#C60000" },
-                { value: "#DE5D00" },
-                { value: "#CD9607" },
-                { value: "#05B517" },
-                { value: "#00CFDC" },
-                { value: "#C406C8" },
-              ]}
-              defaultValue={appearance.mouthColor}
-              onChange={update("mouthColor")}
-            />
-          </div>
+          {!generatedHead && (
+            <div className={styles.blockGroup}>
+              <BodyChangeColor
+                label="Губы"
+                name="mouth-color"
+                items={[
+                  { value: "#202324" },
+                  { value: "#D9A191" },
+                  { value: "#703001" },
+                  { value: "#C60000" },
+                  { value: "#DE5D00" },
+                  { value: "#CD9607" },
+                  { value: "#05B517" },
+                  { value: "#00CFDC" },
+                  { value: "#C406C8" },
+                ]}
+                defaultValue={appearance.mouthColor}
+                onChange={update("mouthColor")}
+              />
+            </div>
+          )}
 
           <button className={styles.save} type="button" onClick={onSave}>
             {profile.created ? (saved ? "Сохранено ✓" : "Сохранить") : "Сохранить и в раздевалку"}
