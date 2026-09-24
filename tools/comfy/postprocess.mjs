@@ -7,8 +7,15 @@ export const removeBackground = async (input, { tolerance = 40, feather = 25 } =
   const { width, height } = info;
   const px = (x, y) => (y * width + x) * 4;
 
-  const corners = [[0, 0], [width - 1, 0], [0, height - 1], [width - 1, height - 1]];
-  const bg = [0, 1, 2].map((c) => corners.reduce((sum, [x, y]) => sum + data[px(x, y) + c], 0) / corners.length);
+  // Background color: the average of the largest group of similar corners, so a subject
+  // cropped by the bottom edge (a portrait's shoulders) doesn't tint it.
+  const corners = [[0, 0], [width - 1, 0], [0, height - 1], [width - 1, height - 1]]
+    .map(([x, y]) => [0, 1, 2].map((c) => data[px(x, y) + c]));
+  const near = (a, b) => Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]) <= tolerance;
+  const group = corners
+    .map((corner) => corners.filter((other) => near(corner, other)))
+    .reduce((best, next) => (next.length > best.length ? next : best));
+  const bg = [0, 1, 2].map((c) => group.reduce((sum, color) => sum + color[c], 0) / group.length);
   const distance = (i) => Math.hypot(data[i] - bg[0], data[i + 1] - bg[1], data[i + 2] - bg[2]);
 
   const visited = new Uint8Array(width * height);

@@ -64,6 +64,18 @@ describe("post-processing", () => {
     expect(out.format).toBe("webp");
     expect(out.width).toBeLessThanOrEqual(24);
   });
+  it("ignores corners covered by a subject cropped at the bottom edge", async () => {
+    // White canvas with a red band across the bottom, like a portrait's shoulders.
+    const band = await sharp({ create: { width: 64, height: 16, channels: 3, background: "#d00000" } }).png().toBuffer();
+    const input = await sharp({ create: { width: 64, height: 64, channels: 3, background: "#ffffff" } })
+      .composite([{ input: band, left: 0, top: 48 }]).png().toBuffer();
+
+    const { data, info } = await sharp(await removeBackground(input)).raw().toBuffer({ resolveWithObject: true });
+    const alpha = (x, y) => data[(y * info.width + x) * 4 + 3];
+    expect(alpha(0, 0)).toBe(0);
+    expect(alpha(32, 20)).toBe(0);
+    expect(alpha(32, 56)).toBe(255);
+  });
 });
 
 describe("ComfyUI client", () => {
