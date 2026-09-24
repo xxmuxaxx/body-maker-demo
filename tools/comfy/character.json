@@ -1,19 +1,67 @@
 {
-  "_comment": "Klein edit prompts for character clothing layers. Items take their subject from subjects.json; extra layers are defined here.",
+  "_comment": "Klein edit prompts for the layered character. Items take their subject from subjects.json; extra layers are defined here. {person}/{his}/{Poss} and the shorts note depend on the base's sex.",
   "keep": "Keep the pose, body proportions, arms, hands, face, feet, white background and the flat cartoon art style exactly unchanged.",
   "prompts": {
-    "shirt": "Dress the man in a {subject}, short sleeves, tucked into his grey shorts. {keep}",
-    "shorts": "Replace his grey shorts with {subject}, the same length and fit as before. He stays bare-chested. {keep}",
-    "boots": "Put a {subject} on his bare feet. {keep}",
-    "gloves": "Put a {subject} on both of his hands. {keep}"
+    "shirt": "Dress the {person} in a {subject}, short sleeves, tucked into {his} grey shorts. {keep}",
+    "shorts": "Replace {his} grey shorts with {subject}, the same length and fit as before. {shortsNote} {keep}",
+    "boots": "Put a {subject} on {his} bare feet. {keep}",
+    "gloves": "Put a {subject} on both of {his} hands. {keep}"
   },
   "extra": {
-    "kit-shirt": { "slot": "shirt", "subject": "plain white football jersey with a plain white collar, no logos" },
-    "kit-shorts": { "slot": "shorts", "subject": "plain white football shorts, no logos" }
+    "kit-shirt": {
+      "slot": "shirt",
+      "subject": "plain white football jersey with a plain white collar, no logos"
+    },
+    "kit-shorts": {
+      "slot": "shorts",
+      "subject": "plain white football shorts, no logos"
+    }
   },
-  "base": {
-    "prompt": "full body flat vector cartoon illustration of an athletic young male football player standing straight, front view, arms relaxed at the sides, bare chest, plain grey shorts, barefoot, bold dark ink outlines, soft cel shading, clean simple shapes, mobile game character art, plain white background",
-    "denoise": 0.6,
-    "seed": 7
+  "sexes": {
+    "man": {
+      "person": "man",
+      "his": "his",
+      "shortsNote": "He stays bare-chested."
+    },
+    "woman": {
+      "person": "woman",
+      "his": "her",
+      "shortsNote": "She keeps her grey sports top."
+    }
+  },
+  "bases": {
+    "man-1": {
+      "sex": "man",
+      "krea": {
+        "prompt": "full body flat vector cartoon illustration of an athletic young male football player standing straight, front view, arms relaxed at the sides, bare chest, plain grey shorts, barefoot, bold dark ink outlines, soft cel shading, clean simple shapes, mobile game character art, plain white background",
+        "denoise": 0.6,
+        "seed": 7
+      }
+    },
+    "man-2": {
+      "sex": "man",
+      "from": "man-1",
+      "prompt": "Make the man's build slim and lean (ectomorph): narrower shoulders, thinner arms and legs, slender muscles. Keep the pose, arm and leg positions, the head, the grey shorts, the white background and the flat cartoon art style exactly unchanged."
+    },
+    "man-3": {
+      "sex": "man",
+      "from": "man-1",
+      "prompt": "Make the man's build heavier and stockier (endomorph): wider waist, a soft round belly, thicker arms and legs. Keep the pose, arm and leg positions, the head, the grey shorts, the white background and the flat cartoon art style exactly unchanged."
+    },
+    "woman-1": {
+      "sex": "woman",
+      "from": "man-1",
+      "prompt": "Turn the man into an athletic young woman football player with a feminine figure, hair tied in a tight bun, wearing a plain grey sports bra top and the same grey shorts, barefoot. Keep the pose, arm and leg positions, the white background and the flat cartoon art style exactly unchanged."
+    },
+    "woman-2": {
+      "sex": "woman",
+      "from": "woman-1",
+      "prompt": "Make the woman's build slim and lean (ectomorph): narrower shoulders, thinner arms and legs. Keep the pose, arm and leg positions, the head, the grey sports top and shorts, the white background and the flat cartoon art style exactly unchanged."
+    },
+    "woman-3": {
+      "sex": "woman",
+      "from": "woman-1",
+      "prompt": "Make the woman's build curvier and heavier (endomorph): wider hips and waist, a soft belly, thicker arms and legs. Keep the pose, arm and leg positions, the head, the grey sports top and shorts, the white background and the flat cartoon art style exactly unchanged."
+    }
   }
 }

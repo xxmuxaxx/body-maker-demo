@@ -15,7 +15,7 @@ import minus from "../../assets/img/minus.svg";
 import styles from "./Cloakroom.module.scss";
 
 const Cloakroom = () => {
-    const appearance = useGameStore((state) => state.profile.appearance);
+    const {appearance, sex, bodyType} = useGameStore((state) => state.profile);
     const inventory = useGameStore((state) => state.inventory);
     const equipped = useGameStore((state) => state.equipped);
     const unequip = useGameStore((state) => state.unequip);
@@ -39,7 +39,7 @@ const Cloakroom = () => {
             <PointsPanel/>
 
             <div className={styles.field}>
-                <Character appearance={appearance} outfit={outfitItems({inventory, equipped})}/>
+                <Character appearance={appearance} sex={sex} bodyType={bodyType} outfit={outfitItems({inventory, equipped})}/>
 
                 {SLOTS.map((slot) => {
                     const item = itemIn(slot.id);

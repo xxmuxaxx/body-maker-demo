@@ -4,7 +4,7 @@ import Body from "./Body";
 import Head from "./Head";
 import Outfit from "./Outfit";
 import { CHARACTER_CANVAS as C } from "./bodyPaths";
-import { characterManifest, hasRasterBody, layerUrl, tintMatrix } from "./characterLayers";
+import { baseInfo, baseKeyFor, hairStyleFor, hasRasterBody, layerUrl, tintMatrix } from "./characterLayers";
 
 import styles from "./index.module.scss";
 
@@ -35,10 +35,11 @@ const Layer = ({ href, filter }) => (
 
 // outfit: { shirt, shorts, boots, gloves }, each { id, look, tint? } or null.
 // tint recolors a neutral layer (the opponents' plain kit) to that color.
-const RasterCharacter = ({ id, appearance, outfit }) => {
+const RasterCharacter = ({ id, baseKey, appearance, outfit, hairStyle }) => {
+    const info = baseInfo(baseKey);
     const layers = SLOT_ORDER.map((slot) => {
         const item = outfit[slot];
-        const href = item ? layerUrl(item.id) : null;
+        const href = item ? layerUrl(baseKey, item.id) : null;
         return { slot, item, href };
     });
     // SVG pieces only for items without a layer; false keeps Outfit from drawing its default shorts.
@@ -48,7 +49,7 @@ const RasterCharacter = ({ id, appearance, outfit }) => {
         const tint = item.tint ? `${id}-tint-${slot}` : undefined;
         return (
             <g key={slot}>
-                {tint ? <defs><TintFilter id={tint} color={item.tint} refLum={characterManifest.layers[item.id]?.refLum ?? 235}/></defs> : null}
+                {tint ? <defs><TintFilter id={tint} color={item.tint} refLum={info.layers[item.id]?.refLum ?? 235}/></defs> : null}
                 <Layer href={href} filter={tint ? `url(#${tint})` : undefined}/>
             </g>
         );
@@ -57,29 +58,33 @@ const RasterCharacter = ({ id, appearance, outfit }) => {
     return (
         <>
             <defs>
-                <TintFilter id={`${id}-skin`} color={appearance.bodyColor} refLum={characterManifest.skinLum}/>
+                <TintFilter id={`${id}-skin`} color={appearance.bodyColor} refLum={info.skinLum}/>
             </defs>
-            <Layer href={layerUrl("base")} filter={`url(#${id}-skin)`}/>
+            <Layer href={layerUrl(baseKey, "base")} filter={`url(#${id}-skin)`}/>
+            {/* the sports top of the women's bases shows only without a shirt */}
+            {!outfit.shirt && info.underwearTop ? <Layer href={layerUrl(baseKey, "underwear-top")}/> : null}
             {/* the shirt is tucked in, so shorts (or the grey underwear) go over it */}
             {draw("shirt")}
-            {outfit.shorts ? draw("shorts") : <Layer href={layerUrl("underwear")}/>}
+            {outfit.shorts ? draw("shorts") : <Layer href={layerUrl(baseKey, "underwear")}/>}
             {draw("boots")}
             {draw("gloves")}
             <svg overflow="visible">
                 <Outfit {...svgFallback}/>
             </svg>
             <g filter={`url(#${id}-ink)`}>
-                <Head {...appearance} className="" x={70} y={-5}/>
+                <Head {...appearance} hairStyle={hairStyle} className="" x={70} y={-5}/>
             </g>
         </>
     );
 };
 
-// The whole character in one SVG. With generated layers (see characterLayers.js) the body
-// and clothes are raster art under an SVG head; otherwise everything is SVG and a single
-// filter draws the ink outline around the silhouette.
-const Character = ({ appearance, outfit = {}, className = styles.character, width = C.width }) => {
+// The whole character in one SVG. With generated layers for this sex and body type (see
+// characterLayers.js) the body and clothes are raster art under an SVG head; otherwise
+// everything is SVG and a single filter draws the ink outline around the silhouette.
+const Character = ({ appearance, sex = "man", bodyType = "1", outfit = {}, className = styles.character, width = C.width }) => {
     const id = useId();
+    const baseKey = baseKeyFor(sex, bodyType);
+    const hairStyle = hairStyleFor(sex);
     const looks = Object.fromEntries(Object.entries(outfit).map(([slot, item]) => [slot, item?.look ?? null]));
 
     return (
@@ -93,14 +98,14 @@ const Character = ({ appearance, outfit = {}, className = styles.character, widt
             <defs>
                 <InkFilter id={`${id}-ink`}/>
             </defs>
-            {hasRasterBody ? (
-                <RasterCharacter id={id} appearance={appearance} outfit={outfit}/>
+            {hasRasterBody(baseKey) ? (
+                <RasterCharacter id={id} baseKey={baseKey} appearance={appearance} outfit={outfit} hairStyle={hairStyle}/>
             ) : (
                 <g filter={`url(#${id}-ink)`}>
                     <Body bodyColor={appearance.bodyColor} className="" x={0} y={0}>
                         <Outfit {...looks}/>
                     </Body>
-                    <Head {...appearance} className="" x={70} y={-5}/>
+                    <Head {...appearance} hairStyle={hairStyle} className="" x={70} y={-5}/>
                 </g>
             )}
         </svg>

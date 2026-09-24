@@ -1,7 +1,7 @@
 // Minimal ComfyUI HTTP client: queue a prompt, wait for it, download the images.
 import { randomUUID } from "node:crypto";
 
-export const createClient = ({ url, auth, fetchImpl = fetch, pollMs = 1500, timeoutMs = 10 * 60 * 1000 }) => {
+export const createClient = ({ url, auth, fetchImpl = fetch, pollMs = 1500, timeoutMs = 10 * 60 * 1000, retries = 4, retryMs = 2000 }) => {
   const base = url.replace(/\/+$/, "");
   const headers = {
     // ngrok free domains show a browser warning page unless this header is set.
@@ -9,8 +9,13 @@ export const createClient = ({ url, auth, fetchImpl = fetch, pollMs = 1500, time
     ...(auth ? { Authorization: `Basic ${Buffer.from(auth).toString("base64")}` } : {}),
   };
 
-  const request = async (path, init = {}) => {
+  // ngrok answers 502-504 for a moment when the tunnel hiccups: retry those a few times.
+  const request = async (path, init = {}, attempt = 0) => {
     const response = await fetchImpl(`${base}${path}`, { ...init, headers: { ...headers, ...init.headers } });
+    if ([502, 503, 504].includes(response.status) && attempt < retries) {
+      await new Promise((resolve) => setTimeout(resolve, retryMs * 2 ** attempt));
+      return request(path, init, attempt + 1);
+    }
     if (!response.ok) {
       const body = await response.text().catch(() => "");
       throw new Error(`ComfyUI ${init.method ?? "GET"} ${path} -> ${response.status} ${body.slice(0, 500)}`);

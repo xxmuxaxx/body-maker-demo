@@ -103,6 +103,14 @@ describe("ComfyUI client", () => {
     expect(polls).toBe(2);
   });
 
+  it("retries when the tunnel briefly answers 503", async () => {
+    let calls = 0;
+    const fakeFetch = async () => (++calls < 3 ? new Response("down", { status: 503 }) : new Response(JSON.stringify({ system: {} })));
+    const client = createClient({ url: "https://comfy.test", fetchImpl: fakeFetch, retryMs: 1 });
+    await expect(client.systemStats()).resolves.toEqual({ system: {} });
+    expect(calls).toBe(3);
+  });
+
   it("surfaces workflow errors", async () => {
     const fakeFetch = async () => new Response(JSON.stringify({ error: "bad" }), { status: 400 });
     const client = createClient({ url: "https://comfy.test", fetchImpl: fakeFetch });

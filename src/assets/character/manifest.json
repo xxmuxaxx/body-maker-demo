@@ -1,94 +1,124 @@
 {
-  "layers": {
-    "brazil-shorts": {
-      "slot": "shorts",
-      "seed": 2,
-      "refLum": 226
-    },
-    "captain-shirt": {
-      "slot": "shirt",
-      "seed": 2,
-      "refLum": 255
-    },
-    "club-shirt": {
-      "slot": "shirt",
-      "seed": 3,
-      "refLum": 206
-    },
-    "england-shirt": {
-      "slot": "shirt",
-      "seed": 3,
-      "refLum": 255
-    },
-    "golden-boots": {
-      "slot": "boots",
-      "seed": 1,
-      "refLum": 219
-    },
-    "grip-gloves": {
-      "slot": "gloves",
-      "seed": 2,
-      "refLum": 135
-    },
-    "keeper-gloves": {
-      "slot": "gloves",
-      "seed": 1,
-      "refLum": 183
-    },
-    "kit-shirt": {
-      "slot": "shirt",
-      "seed": 1,
-      "refLum": 254
-    },
-    "kit-shorts": {
-      "slot": "shorts",
-      "seed": 2,
-      "refLum": 255
-    },
-    "lightning-shorts": {
-      "slot": "shorts",
-      "seed": 2,
-      "refLum": 217
-    },
-    "portugal-shorts": {
-      "slot": "shorts",
-      "seed": 2,
-      "refLum": 46
-    },
-    "saudi-shirt": {
-      "slot": "shirt",
-      "seed": 3,
-      "refLum": 218
-    },
-    "speed-boots": {
-      "slot": "boots",
-      "seed": 2,
-      "refLum": 167
-    },
-    "studs-boots": {
-      "slot": "boots",
-      "seed": 1,
-      "refLum": 80
-    },
-    "training-shirt": {
-      "slot": "shirt",
-      "seed": 1,
-      "refLum": 254
-    },
-    "training-shorts": {
-      "slot": "shorts",
-      "seed": 2,
-      "refLum": 109
-    },
-    "wall-gloves": {
-      "slot": "gloves",
-      "seed": 3,
-      "refLum": 186
-    }
-  },
-  "skinLum": 203,
   "canvas": {
     "width": 640,
     "height": 1536
+  },
+  "bases": {
+    "man-1": {
+      "skinLum": 203,
+      "layers": {
+        "brazil-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 226
+        },
+        "captain-shirt": {
+          "slot": "shirt",
+          "seed": 2,
+          "refLum": 255
+        },
+        "club-shirt": {
+          "slot": "shirt",
+          "seed": 3,
+          "refLum": 206
+        },
+        "england-shirt": {
+          "slot": "shirt",
+          "seed": 3,
+          "refLum": 255
+        },
+        "golden-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 219
+        },
+        "grip-gloves": {
+          "slot": "gloves",
+          "seed": 2,
+          "refLum": 135
+        },
+        "keeper-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 183
+        },
+        "kit-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "kit-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 255
+        },
+        "lightning-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 217
+        },
+        "portugal-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 46
+        },
+        "saudi-shirt": {
+          "slot": "shirt",
+          "seed": 3,
+          "refLum": 218
+        },
+        "speed-boots": {
+          "slot": "boots",
+          "seed": 2,
+          "refLum": 167
+        },
+        "studs-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 80
+        },
+        "training-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "training-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 109
+        },
+        "wall-gloves": {
+          "slot": "gloves",
+          "seed": 3,
+          "refLum": 186
+        }
+      },
+      "underwearTop": true
+    },
+    "man-2": {
+      "layers": {},
+      "skinLum": 208,
+      "underwearTop": true
+    },
+    "man-3": {
+      "layers": {},
+      "skinLum": 202,
+      "underwearTop": true
+    },
+    "woman-1": {
+      "layers": {},
+      "skinLum": 209,
+      "underwearTop": true
+    },
+    "woman-2": {
+      "layers": {},
+      "skinLum": 209,
+      "underwearTop": true
+    },
+    "woman-3": {
+      "layers": {},
+      "skinLum": 211,
+      "underwearTop": true
+    }
   }
 }

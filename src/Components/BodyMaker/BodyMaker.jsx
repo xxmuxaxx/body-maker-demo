@@ -60,7 +60,12 @@ const BodyMaker = () => {
               label="Пол"
               name="sex"
               value={sex}
-              onChange={(event) => setSex(event.target.value)}
+              onChange={(event) => {
+                setSex(event.target.value);
+                // A beard rarely suits the women's look; it can still be switched back on.
+                if (event.target.value === "woman") setAppearance((old) => ({ ...old, showBeard: false }));
+                setSaved(false);
+              }}
               items={[
                 { value: "man", name: "мужской" },
                 { value: "woman", name: "женский" },
@@ -73,7 +78,10 @@ const BodyMaker = () => {
               label="Телосложение"
               name="body-type"
               value={bodyType}
-              onChange={(event) => setBodyType(event.target.value)}
+              onChange={(event) => {
+                setBodyType(event.target.value);
+                setSaved(false);
+              }}
               items={[
                 { value: "1", name: "мезоморф" },
                 { value: "2", name: "эктоморф" },
@@ -215,7 +223,7 @@ const BodyMaker = () => {
       </div>
 
       <div className={styles.field}>
-        <Character appearance={appearance} outfit={outfitItems({ inventory, equipped })} />
+        <Character appearance={appearance} sex={sex} bodyType={bodyType} outfit={outfitItems({ inventory, equipped })} />
       </div>
     </div>
   );

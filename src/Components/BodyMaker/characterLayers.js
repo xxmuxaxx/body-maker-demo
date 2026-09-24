@@ -1,14 +1,21 @@
-// Raster layers made by tools/comfy/character.mjs (src/assets/character).
-// Everything here degrades gracefully: without a manifest the character stays pure SVG,
+// Raster layers made by tools/comfy/character.mjs: src/assets/character/<base>/<layer>.webp,
+// one base per sex and body type ("man-1" ... "woman-3").
+// Everything here degrades gracefully: a base without files keeps the character pure SVG,
 // and an item without a layer falls back to its SVG outfit piece.
-const files = import.meta.glob("../../assets/character/*.webp", { eager: true, import: "default" });
+const files = import.meta.glob("../../assets/character/*/*.webp", { eager: true, import: "default" });
 const manifests = import.meta.glob("../../assets/character/manifest.json", { eager: true, import: "default" });
 
-export const characterManifest = Object.values(manifests)[0] ?? null;
+const manifest = Object.values(manifests)[0] ?? null;
 
-export const layerUrl = (name) => files[`../../assets/character/${name}.webp`] ?? null;
+export const baseKeyFor = (sex, bodyType) => `${sex === "woman" ? "woman" : "man"}-${bodyType || "1"}`;
 
-export const hasRasterBody = Boolean(characterManifest?.skinLum && layerUrl("base"));
+export const hairStyleFor = (sex) => (sex === "woman" ? "long" : "short");
+
+export const baseInfo = (baseKey) => manifest?.bases?.[baseKey] ?? null;
+
+export const layerUrl = (baseKey, name) => files[`../../assets/character/${baseKey}/${name}.webp`] ?? null;
+
+export const hasRasterBody = (baseKey) => Boolean(baseInfo(baseKey)?.skinLum && layerUrl(baseKey, "base"));
 
 // feColorMatrix values that recolor a layer by luminance: out = color * lum / refLum.
 export const tintMatrix = (hex, refLum) => {

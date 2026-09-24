@@ -27,11 +27,11 @@ export const slotArea = (slot) => {
   const white = 'fill="#fff"';
   if (slot === "shirt") {
     return maskOf(`<clipPath id="t"><rect x="-50" y="-50" width="400" height="${TUCK_Y + 50}"/></clipPath>` +
-      `<g clip-path="url(#t)"><path d="${SHIRT_PATH}" transform="${SHIRT_TRANSFORM}" ${white}/></g>`, 14);
+      `<g clip-path="url(#t)"><path d="${SHIRT_PATH}" transform="${SHIRT_TRANSFORM}" ${white}/></g>`, 26);
   }
-  if (slot === "shorts") return maskOf(`<path d="${SHORTS_PATH}" ${white}/>`, 16);
-  if (slot === "boots") return maskOf(`<path d="${BOOT_PATH}" ${white}/><path d="${BOOT_PATH}" transform="${BOOT_RIGHT}" ${white}/><rect x="10" y="470" width="170" height="80" ${white}/>`, 10);
-  if (slot === "gloves") return maskOf(`<path d="${GLOVE_PATH}" ${white}/><path d="${GLOVE_PATH}" transform="${GLOVE_RIGHT}" ${white}/>`, 22);
+  if (slot === "shorts") return maskOf(`<path d="${SHORTS_PATH}" ${white}/>`, 26);
+  if (slot === "boots") return maskOf(`<path d="${BOOT_PATH}" ${white}/><path d="${BOOT_PATH}" transform="${BOOT_RIGHT}" ${white}/><rect x="5" y="465" width="180" height="85" ${white}/>`, 14);
+  if (slot === "gloves") return maskOf(`<path d="${GLOVE_PATH}" ${white}/><path d="${GLOVE_PATH}" transform="${GLOVE_RIGHT}" ${white}/>`, 30);
   throw new Error(`Unknown slot ${slot}`);
 };
 
@@ -51,20 +51,31 @@ const erodeAlpha = (buf) => {
   }
 };
 
-// Splits the generated base into the tintable skin layer and the untinted grey underwear,
-// and removes the generated head (the SVG head is drawn on top). Returns the reference
-// skin luminance the app uses to tint the skin.
+// Splits a generated base into the tintable skin layer and the untinted grey underwear
+// (bottom: shorts; top: the women's sports top), and removes the generated head (the SVG
+// head is drawn on top). Returns the reference skin luminance the app tints against.
+export const UNDERWEAR_SPLIT_Y = 200;
+
 export const splitBase = async (basePng) => {
   const cut = await rgba(await removeBackground(basePng));
+  // Background enclosed between an arm and the body is not reachable from the edges: the base
+  // itself has no white, so any near-white pixel left is background.
+  for (let i = 0; i < W * H; i++) {
+    if (Math.min(cut[i * 4], cut[i * 4 + 1], cut[i * 4 + 2]) > 238) cut[i * 4 + 3] = 0;
+  }
   erodeAlpha(cut);
-  const shorts = await maskOf(`<path d="${SHORTS_PATH}" fill="#fff"/>`, 16);
+  // Heavier builds wear longer shorts than the SVG silhouette, hence the band over the hips.
+  const torso = await maskOf(
+    `<path d="${SHORTS_PATH}" fill="#fff"/><path d="${SHIRT_PATH}" transform="${SHIRT_TRANSFORM}" fill="#fff"/>` +
+    `<rect x="20" y="200" width="150" height="135" fill="#fff"/>`, 24);
   const skin = Buffer.from(cut);
-  const underwear = Buffer.alloc(W * H * 4);
-  let skinSum = 0, skinCount = 0;
+  const top = Buffer.alloc(W * H * 4);
+  const bottom = Buffer.alloc(W * H * 4);
+  let skinSum = 0, skinCount = 0, topCount = 0;
 
   for (let i = 0; i < W * H; i++) {
     const [bx, by] = toBody(i % W, Math.floor(i / W));
-    const neck = bx > 80 && bx < 114 && by > 55;
+    const neck = bx > 78 && bx < 116 && by > 55;
     if (by < 82 && !neck) {
       skin[i * 4 + 3] = 0;
       continue;
@@ -73,15 +84,22 @@ export const splitBase = async (basePng) => {
     const max = Math.max(r, g, b), min = Math.min(r, g, b);
     const saturation = max ? (max - min) / max : 0;
     const l = lum(cut, i, 4);
-    if (shorts[i] > 127 && saturation < 0.12 && l > 70) {
-      underwear.set(cut.subarray(i * 4, i * 4 + 4), i * 4);
+    if (torso[i] > 127 && saturation < 0.12 && l > 70) {
+      if (by < UNDERWEAR_SPLIT_Y) topCount++;
+      (by < UNDERWEAR_SPLIT_Y ? top : bottom).set(cut.subarray(i * 4, i * 4 + 4), i * 4);
       skin[i * 4 + 3] = 0;
     } else if (skin[i * 4 + 3] === 255 && saturation > 0.12 && l > 120) {
       skinSum += l;
       skinCount++;
     }
   }
-  return { skin: await toPng(skin), underwear: await toPng(underwear), skinLum: Math.round(skinSum / skinCount) };
+  const hasTop = topCount > 3000; // a real sports top, not a few greyish pixels
+  return {
+    skin: await toPng(skin),
+    underwear: await toPng(bottom),
+    underwearTop: hasTop ? await toPng(top) : null,
+    skinLum: Math.round(skinSum / skinCount),
+  };
 };
 
 // Light, moderately saturated warm pixels: the generated skin. Clothing layers drop them,

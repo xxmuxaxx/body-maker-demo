@@ -106,9 +106,12 @@ yarn gen:art --id=golden-boots --force --reroll=2   # другой вариан�
 перекрашивается в браузере.
 
 ```bash
-yarn gen:character base                     # база: тело + серые шорты
-yarn gen:character items --id=golden-boots  # варианты вещи (seed 1,2,3) + лист для выбора
-yarn gen:character pick golden-boots=2      # сохранить выбранный вариант как слой
+yarn gen:character bases --id=woman-2                 # варианты базы + лист для выбора
+yarn gen:character pick-base woman-2=3                # выбрать базу и разрезать её на слои
+yarn gen:character items --id=golden-boots            # вещь на всех базах
+yarn gen:character pick --base=woman-2 golden-boots=1 # сохранить вариант как слой
 ```
+
+Баз шесть: мужская и женская в трёх телосложениях (`man-1` … `woman-3`).
 
 Слои лежат в `src/assets/character/`. Если у вещи нет слоя, на персонаже рисуется её SVG-версия.

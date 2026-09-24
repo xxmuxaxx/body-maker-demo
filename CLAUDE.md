@@ -36,17 +36,17 @@ Generated art lives in `src/assets/gen/<kind>/<id>.webp` (kind = items, boosters
 ### Character
 
 `BodyMaker/Character.jsx` draws the character as one SVG in body coordinates (the 191x532 space of `Body.jsx`; shared shapes and `CHARACTER_CANVAS` live in `bodyPaths.js`). It has two modes:
-- **Raster** (used when `src/assets/character/manifest.json` and `base.webp` exist; see `characterLayers.js`): the generated body `base.webp` is recolored to `appearance.bodyColor` by an `feColorMatrix` luminance tint (`tintMatrix`, reference `skinLum` from the manifest). Clothing layers `<itemId>.webp` go on top in this order: shirt, then shorts (or the grey `underwear.webp`), boots, gloves. Last comes the SVG `Head` with the ink outline. An outfit entry with `tint` recolors a neutral layer; opponents use this with `kit-shirt`/`kit-shorts`. An item without a layer falls back to its SVG piece from `Outfit.jsx`.
+- **Raster** (used when the base for the profile's sex and body type exists; see `characterLayers.js`): there is one base per sex and body type (`man-1` … `woman-3`, folders under `src/assets/character/`, listed in `manifest.json`). The generated body `base.webp` is recolored to `appearance.bodyColor` by an `feColorMatrix` luminance tint (`tintMatrix`, reference `skinLum` from the manifest). Clothing layers `<itemId>.webp` go on top in this order: `underwear-top.webp` (the women's sports top, only when no shirt is worn), shirt, then shorts (or the grey `underwear.webp`), boots, gloves. Last comes the SVG `Head` with the ink outline. For women, `hairStyle="long"` swaps the undercut for long hair, thins the brows and adds lashes. An outfit entry with `tint` recolors a neutral layer; opponents use this with `kit-shirt`/`kit-shorts`. An item without a layer falls back to its SVG piece from `Outfit.jsx`.
 - **SVG** (fallback): `Body.jsx` (cel-shaded rim), `Outfit.jsx` (clothes drawn from each item's `look`) and `Head.jsx` under one ink-outline filter.
 
 Each item in `items.json` has a `look` (`base`, plus optional `base2`, `trim`, `accent`, `sole`, `armband`, `emblem` and a `pattern` such as `gradient`, `sideStripes`, `hoops`, `sideStripe` or `lightning`) for the SVG mode and fallbacks. `outfitItems(state)` from `game/stats.js` maps equipped slots to `{ id, look }`. SVG ids come from `useId`, because several characters can be on the page at once.
 
-The raster layers are made by `tools/comfy/character.mjs`:
-1. `base` img2imgs the rendered SVG body (`tools/comfy/character/base-input.png`) with Krea 2 into `base.png`. `layers.mjs` then removes the background and the generated head, and splits the grey shorts into `underwear.webp`.
-2. `items` Klein-edits `base.png` once per seed (prompts in `tools/comfy/character.json`, subjects from `subjects.json`) and writes a review sheet to `tools/comfy/character/variants/sheet.png`.
-3. `pick id=seed` keeps the pixels the edit changed inside the slot area (from the SVG silhouettes), then records the seed and the layer's `refLum` in the manifest.
+The raster layers are made by `tools/comfy/character.mjs` (bases and prompts are in `tools/comfy/character.json`):
+1. `bases` makes base variants. `man-1` is a Krea 2 img2img of the rendered SVG body (`tools/comfy/character/base-input.png`); the other bases are Klein edits of their `from` base (thinner, heavier, female). `pick-base key=seed` stores the chosen base in `tools/comfy/character/bases/<key>.png`, and `layers.mjs` then removes the background and the generated head, and splits the grey underwear into bottom and top.
+2. `items --base=<key|all>` Klein-edits each base once per seed, loops over items first so bases of the same sex reuse the encoded prompt, and writes review sheets to `tools/comfy/character/variants/<key>/`.
+3. `pick --base=<key> id=seed` (or `--all=<seed>`) keeps the pixels the edit changed inside the slot area (from the SVG silhouettes), then records the seed and the layer's `refLum` in the manifest.
 
-To add an item: add its subject, run `items --id=<id>`, look at the sheet, then run `pick <id>=<seed>`.
+To add an item: add its subject, run `items --id=<id>` (all bases), look at the sheets, then run `pick` for each base.
 
 ## Conventions
 

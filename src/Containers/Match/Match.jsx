@@ -23,6 +23,7 @@ import {STAT_KEYS, STAT_TITLES, computeStats, outfitItems} from "../../game/stat
 import {shade} from "../../utils/color";
 import {useGameStore} from "../../store/gameStore";
 import {generatedArt} from "../../data/images";
+import {hairStyleFor} from "../../Components/BodyMaker/characterLayers";
 
 import styles from "./Match.module.scss";
 
@@ -71,13 +72,13 @@ const KickDots = ({kicks}) => (
     </div>
 );
 
-const Keeper = ({appearance, outfit, diveCol}) => {
+const Keeper = ({appearance, sex, bodyType, outfit, diveCol}) => {
     const shift = diveCol ? KEEPER_SHIFT[diveCol] : 0;
     const tilt = diveCol === "left" ? -35 : diveCol === "right" ? 35 : 0;
     return (
         <div className={styles.keeper}
              style={{transform: `translateX(calc(-50% + ${shift}px)) rotate(${tilt}deg)`}}>
-            <Character appearance={appearance} outfit={outfit} className="" width={71}/>
+            <Character appearance={appearance} sex={sex} bodyType={bodyType} outfit={outfit} className="" width={71}/>
         </div>
     );
 };
@@ -140,7 +141,13 @@ const MatchScreen = ({opponent, initialBoosterId}) => {
     const finished = isFinished(match);
     const turn = currentTurn(match);
     const {player: playerGoals, opponent: opponentGoals} = score(match);
-    const me = {appearance: state.profile.appearance, kit: "#96C83C", outfit: outfitItems(state)};
+    const me = {
+        appearance: {...state.profile.appearance, hairStyle: hairStyleFor(state.profile.sex)},
+        sex: state.profile.sex,
+        bodyType: state.profile.bodyType,
+        kit: "#96C83C",
+        outfit: outfitItems(state),
+    };
     const them = {appearance: opponent.appearance, kit: opponent.kit, outfit: opponentOutfit(opponent.kit)};
 
     // During the animation show the kick that just happened, otherwise the upcoming one.
@@ -192,7 +199,7 @@ const MatchScreen = ({opponent, initialBoosterId}) => {
                             </div>
                         ) : null}
                     </div>
-                    <Keeper appearance={keeper.appearance} outfit={keeper.outfit}
+                    <Keeper appearance={keeper.appearance} sex={keeper.sex} bodyType={keeper.bodyType} outfit={keeper.outfit}
                             diveCol={animating && lastKick ? lastKick.diveCol : null}/>
                     <span className={`${styles.ball} ${animating ? styles.ballFlying : ""}`}
                           style={{transform: `translate(${ball.x - 14}px, ${ball.y - 14}px)`}}/>
