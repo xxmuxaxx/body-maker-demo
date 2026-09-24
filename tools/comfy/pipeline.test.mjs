@@ -109,3 +109,40 @@ describe("ComfyUI client", () => {
     await expect(client.run({})).rejects.toThrow(/400/);
   });
 });
+
+describe("character layers", async () => {
+  const { H, W, extractLayer, slotArea } = await import("./layers.mjs");
+  const solid = (color) => sharp({ create: { width: W, height: H, channels: 3, background: color } }).png().toBuffer();
+
+  it("tells skin from clothing colors", async () => {
+    const { isSkinLike } = await import("./layers.mjs");
+    expect(isSkinLike(0xed, 0xc4, 0xb0)).toBe(true); // light skin
+    expect(isSkinLike(0xc9, 0x9a, 0x84)).toBe(true); // skin in shadow
+    expect(isSkinLike(0xe0, 0xa9, 0x3b)).toBe(false); // gold trim
+    expect(isSkinLike(0xd1, 0x2b, 0x2b)).toBe(false); // red trim
+    expect(isSkinLike(0xf4, 0xf4, 0xf4)).toBe(false); // white fabric
+    expect(isSkinLike(0x3f, 0x9b, 0x45)).toBe(false); // green fabric
+  });
+
+  it("builds one-channel slot masks of canvas size", async () => {
+    for (const slot of ["shirt", "shorts", "boots", "gloves"]) {
+      const mask = await slotArea(slot);
+      expect(mask.length).toBe(W * H);
+      expect(mask.some((v) => v === 255)).toBe(true);
+    }
+  });
+
+  it("keeps only changed pixels inside the slot area", async () => {
+    const base = await solid("#e0c0b0");
+    // The "edit" paints a red block over the chest and a stray change far away at the top.
+    const edit = await sharp(base).composite([
+      { input: await sharp({ create: { width: 200, height: 200, channels: 3, background: "#d00000" } }).png().toBuffer(), left: 220, top: 400 },
+      { input: await sharp({ create: { width: 40, height: 40, channels: 3, background: "#0000d0" } }).png().toBuffer(), left: 10, top: 10 },
+    ]).png().toBuffer();
+    const { data } = await sharp(await extractLayer(edit, base, await slotArea("shirt"))).raw().toBuffer({ resolveWithObject: true });
+    const alpha = (x, y) => data[(y * W + x) * 4 + 3];
+    expect(alpha(320, 500)).toBe(255); // changed, inside the shirt
+    expect(alpha(30, 30)).toBe(0); // changed, outside the shirt
+    expect(alpha(320, 300)).toBe(0); // inside the shirt, unchanged
+  });
+});

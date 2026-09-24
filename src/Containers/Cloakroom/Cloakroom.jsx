@@ -7,7 +7,7 @@ import {Character} from "../../Components/BodyMaker";
 import Card from "../../Components/Card/Card";
 import ClothesModal from "../../Components/ClothesModal";
 import {itemsById, SLOTS} from "../../game/catalog";
-import {outfitLooks} from "../../game/stats";
+import {outfitItems} from "../../game/stats";
 import {useGameStore} from "../../store/gameStore";
 
 import plus from "../../assets/img/plus.svg";
@@ -39,7 +39,7 @@ const Cloakroom = () => {
             <PointsPanel/>
 
             <div className={styles.field}>
-                <Character appearance={appearance} outfit={outfitLooks({inventory, equipped})}/>
+                <Character appearance={appearance} outfit={outfitItems({inventory, equipped})}/>
 
                 {SLOTS.map((slot) => {
                     const item = itemIn(slot.id);

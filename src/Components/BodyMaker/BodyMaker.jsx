@@ -8,7 +8,7 @@ import Radios from "../utils/Radios/Radios";
 import styles from "./index.module.scss";
 import BodyChangeColor from "./BodyChangeColor";
 import { useGameStore } from "../../store/gameStore";
-import { outfitLooks } from "../../game/stats";
+import { outfitItems } from "../../game/stats";
 
 const BodyMaker = () => {
   const navigate = useNavigate();
@@ -215,7 +215,7 @@ const BodyMaker = () => {
       </div>
 
       <div className={styles.field}>
-        <Character appearance={appearance} outfit={outfitLooks({ inventory, equipped })} />
+        <Character appearance={appearance} outfit={outfitItems({ inventory, equipped })} />
       </div>
     </div>
   );

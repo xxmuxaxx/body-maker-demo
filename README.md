@@ -98,3 +98,17 @@ yarn gen:art --id=golden-boots --force --reroll=2   # другой вариан�
   (`COMFY_CHECKPOINT` здесь нужен только для выбора размера 1024×1024, модели прописаны в самом workflow).
 - Модель берётся из `COMFY_CHECKPOINT`. Если переменная не задана, выбирается первый SDXL-подобный
   checkpoint на сервере.
+
+## Персонаж из слоёв
+
+Тело и одежда персонажа тоже генерируются через ComfyUI: Krea 2 стилизует SVG-тело,
+а Flux 2 Klein «надевает» на него каждую вещь. Голова остаётся SVG, цвет кожи
+перекрашивается в браузере.
+
+```bash
+yarn gen:character base                     # база: тело + серые шорты
+yarn gen:character items --id=golden-boots  # варианты вещи (seed 1,2,3) + лист для выбора
+yarn gen:character pick golden-boots=2      # сохранить выбранный вариант как слой
+```
+
+Слои лежат в `src/assets/character/`. Если у вещи нет слоя, на персонаже рисуется её SVG-версия.

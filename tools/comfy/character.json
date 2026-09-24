@@ -1,0 +1,19 @@
+{
+  "_comment": "Klein edit prompts for character clothing layers. Items take their subject from subjects.json; extra layers are defined here.",
+  "keep": "Keep the pose, body proportions, arms, hands, face, feet, white background and the flat cartoon art style exactly unchanged.",
+  "prompts": {
+    "shirt": "Dress the man in a {subject}, short sleeves, tucked into his grey shorts. {keep}",
+    "shorts": "Replace his grey shorts with {subject}, the same length and fit as before. He stays bare-chested. {keep}",
+    "boots": "Put a {subject} on his bare feet. {keep}",
+    "gloves": "Put a {subject} on both of his hands. {keep}"
+  },
+  "extra": {
+    "kit-shirt": { "slot": "shirt", "subject": "plain white football jersey with a plain white collar, no logos" },
+    "kit-shorts": { "slot": "shorts", "subject": "plain white football shorts, no logos" }
+  },
+  "base": {
+    "prompt": "full body flat vector cartoon illustration of an athletic young male football player standing straight, front view, arms relaxed at the sides, bare chest, plain grey shorts, barefoot, bold dark ink outlines, soft cel shading, clean simple shapes, mobile game character art, plain white background",
+    "denoise": 0.6,
+    "seed": 7
+  }
+}

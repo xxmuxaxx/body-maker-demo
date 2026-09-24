@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "lint": "eslint .",
     "test": "vitest run",
-    "gen:art": "node tools/comfy/generate.mjs"
+    "gen:art": "node tools/comfy/generate.mjs",
+    "gen:character": "node tools/comfy/character.mjs"
   },
   "dependencies": {
     "@react-spring/web": "^10.1.2",

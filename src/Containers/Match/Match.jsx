@@ -4,7 +4,7 @@ import {Link, Navigate, useNavigate, useParams, useSearchParams} from "react-rou
 import Button from "../../Components/utils/Button/Button";
 import {Character} from "../../Components/BodyMaker";
 import Portrait from "./Portrait";
-import {boostersById, opponentsById, ranks} from "../../game/catalog";
+import {boostersById, itemsById, opponentsById, ranks} from "../../game/catalog";
 import {
     COLUMNS,
     KICKS_PER_SIDE,
@@ -19,7 +19,7 @@ import {
     score,
     zoneById,
 } from "../../game/penalty";
-import {STAT_KEYS, STAT_TITLES, computeStats, outfitLooks} from "../../game/stats";
+import {STAT_KEYS, STAT_TITLES, computeStats, outfitItems} from "../../game/stats";
 import {shade} from "../../utils/color";
 import {useGameStore} from "../../store/gameStore";
 import {generatedArt} from "../../data/images";
@@ -77,16 +77,16 @@ const Keeper = ({appearance, outfit, diveCol}) => {
     return (
         <div className={styles.keeper}
              style={{transform: `translateX(calc(-50% + ${shift}px)) rotate(${tilt}deg)`}}>
-            <Character appearance={appearance} outfit={outfit} className="" width={64}/>
+            <Character appearance={appearance} outfit={outfit} className="" width={71}/>
         </div>
     );
 };
 
-// Opponents play in their kit color with plain keeper gloves.
+// Opponents play in their kit color: a neutral kit layer tinted to it, plus plain keeper gloves.
 const opponentOutfit = (kit) => ({
-    shirt: {base: kit, trim: shade(kit, 0.35)},
-    shorts: {base: "#202324"},
-    gloves: {base: "#F4F4F4", accent: kit},
+    shirt: {id: "kit-shirt", tint: kit, look: {base: kit, trim: shade(kit, 0.35)}},
+    shorts: {id: "kit-shorts", tint: "#2b2f31", look: {base: "#202324"}},
+    gloves: {id: "keeper-gloves", look: itemsById["keeper-gloves"].look},
 });
 
 const MatchScreen = ({opponent, initialBoosterId}) => {
@@ -140,7 +140,7 @@ const MatchScreen = ({opponent, initialBoosterId}) => {
     const finished = isFinished(match);
     const turn = currentTurn(match);
     const {player: playerGoals, opponent: opponentGoals} = score(match);
-    const me = {appearance: state.profile.appearance, kit: "#96C83C", outfit: outfitLooks(state)};
+    const me = {appearance: state.profile.appearance, kit: "#96C83C", outfit: outfitItems(state)};
     const them = {appearance: opponent.appearance, kit: opponent.kit, outfit: opponentOutfit(opponent.kit)};
 
     // During the animation show the kick that just happened, otherwise the upcoming one.

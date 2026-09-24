@@ -41,11 +41,11 @@ export const computeStats = (state, boosterId = null) => {
   };
 };
 
-// Item "look" per slot, for drawing the character's outfit.
-export const outfitLooks = ({ inventory, equipped }) =>
+// Equipped item per slot as { id, look }, for drawing the character's outfit.
+export const outfitItems = ({ inventory, equipped }) =>
   Object.fromEntries(
     Object.entries(equipped).map(([slot, uid]) => {
       const entry = inventory.find((e) => e.uid === uid);
-      return [slot, entry ? itemsById[entry.itemId].look ?? null : null];
+      return [slot, entry ? { id: entry.itemId, look: itemsById[entry.itemId].look } : null];
     })
   );
