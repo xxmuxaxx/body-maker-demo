@@ -44,7 +44,7 @@ const parseArgs = (argv) => {
   return args;
 };
 
-const looksLikeLargeModel = (name) => /xl|flux|sd3|pony|illustrious/i.test(name);
+const looksLikeLargeModel = (name) => /xl|flux|sd3|pony|illustrious|krea/i.test(name);
 
 const main = async () => {
   const args = parseArgs(process.argv.slice(2));

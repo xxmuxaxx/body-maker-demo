@@ -26,8 +26,9 @@
 .cardImage {
   margin: 20px 0;
   display: block;
-  width: auto;
-  height: auto;
+  width: 160px;
+  height: 160px;
+  object-fit: contain;
 }
 
 .cardEmpty {

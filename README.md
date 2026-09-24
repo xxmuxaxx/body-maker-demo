@@ -93,5 +93,8 @@ yarn gen:art --id=golden-boots --force --reroll=2   # другой вариан�
 - Промпты: `tools/comfy/subjects.json` (что нарисовать) и `tools/comfy/style.json` (общий стиль).
 - Workflow по умолчанию: `tools/comfy/workflows/txt2img.json`. Свой workflow в API-формате
   с плейсхолдерами `{{positive}}`, `{{seed}}` и т. д. можно подключить через `COMFY_WORKFLOW=path.json`.
+- Готовый workflow под Krea 2 Turbo (8 шагов, cfg 1, без негативного промпта): `tools/comfy/workflows/krea2-turbo.json`.
+  Запуск: `COMFY_WORKFLOW=tools/comfy/workflows/krea2-turbo.json COMFY_CHECKPOINT=krea2_turbo_fp8_scaled.safetensors yarn gen:art ...`
+  (`COMFY_CHECKPOINT` здесь нужен только для выбора размера 1024×1024, модели прописаны в самом workflow).
 - Модель берётся из `COMFY_CHECKPOINT`. Если переменная не задана, выбирается первый SDXL-подобный
   checkpoint на сервере.

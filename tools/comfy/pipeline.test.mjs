@@ -5,6 +5,7 @@ import { createClient } from "./client.mjs";
 import { finalize, removeBackground } from "./postprocess.mjs";
 import { fillWorkflow, seedFromId } from "./workflow.mjs";
 import template from "./workflows/txt2img.json";
+import krea from "./workflows/krea2-turbo.json";
 import subjects from "./subjects.json";
 import items from "../../src/data/items.json";
 import boosters from "../../src/data/boosters.json";
@@ -20,6 +21,13 @@ describe("workflow template", () => {
     expect(wf["5"].inputs.seed).toBe(42);
     expect(wf["4"].inputs.width).toBe(512);
     expect(wf["5"].inputs.model).toEqual(["1", 0]);
+    expect(JSON.stringify(wf)).not.toContain("{{");
+  });
+
+  it("fills the Krea 2 Turbo workflow", () => {
+    const wf = fillWorkflow(krea, { positive: "a ball", width: 1024, height: 1024, seed: 7, prefix: "x/y" });
+    expect(wf["7"].inputs.seed).toBe(7);
+    expect(wf["4"].inputs.text).toBe("a ball");
     expect(JSON.stringify(wf)).not.toContain("{{");
   });
 
