@@ -78,6 +78,10 @@ describe("catalog", () => {
     }
   });
 
+  it("describes how every item looks on the character", () => {
+    items.forEach((item) => expect(item.look?.base, item.id).toMatch(/^#[0-9A-F]{6}$/i));
+  });
+
   it("has unique ids and opponents reachable by rank", () => {
     expect(new Set(items.map((i) => i.id)).size).toBe(items.length);
     opponents.forEach((o) => expect(o.minRank).toBeLessThan(ranks.length));

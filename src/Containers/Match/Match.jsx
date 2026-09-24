@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from "react";
 import {Link, Navigate, useNavigate, useParams, useSearchParams} from "react-router";
 
 import Button from "../../Components/utils/Button/Button";
-import {Head} from "../../Components/BodyMaker";
+import {Character} from "../../Components/BodyMaker";
 import Portrait from "./Portrait";
 import {boostersById, opponentsById, ranks} from "../../game/catalog";
 import {
@@ -19,7 +19,8 @@ import {
     score,
     zoneById,
 } from "../../game/penalty";
-import {STAT_KEYS, STAT_TITLES, computeStats} from "../../game/stats";
+import {STAT_KEYS, STAT_TITLES, computeStats, outfitLooks} from "../../game/stats";
+import {shade} from "../../utils/color";
 import {useGameStore} from "../../store/gameStore";
 import {generatedArt} from "../../data/images";
 
@@ -70,17 +71,23 @@ const KickDots = ({kicks}) => (
     </div>
 );
 
-const Keeper = ({appearance, kit, diveCol}) => {
+const Keeper = ({appearance, outfit, diveCol}) => {
     const shift = diveCol ? KEEPER_SHIFT[diveCol] : 0;
     const tilt = diveCol === "left" ? -35 : diveCol === "right" ? 35 : 0;
     return (
         <div className={styles.keeper}
              style={{transform: `translateX(calc(-50% + ${shift}px)) rotate(${tilt}deg)`}}>
-            <div className={styles.keeperHead}><Head {...appearance}/></div>
-            <div className={styles.keeperBody} style={{background: kit}}/>
+            <Character appearance={appearance} outfit={outfit} className="" width={64}/>
         </div>
     );
 };
+
+// Opponents play in their kit color with plain keeper gloves.
+const opponentOutfit = (kit) => ({
+    shirt: {base: kit, trim: shade(kit, 0.35)},
+    shorts: {base: "#202324"},
+    gloves: {base: "#F4F4F4", accent: kit},
+});
 
 const MatchScreen = ({opponent, initialBoosterId}) => {
     const navigate = useNavigate();
@@ -133,8 +140,8 @@ const MatchScreen = ({opponent, initialBoosterId}) => {
     const finished = isFinished(match);
     const turn = currentTurn(match);
     const {player: playerGoals, opponent: opponentGoals} = score(match);
-    const me = {appearance: state.profile.appearance, kit: "#96C83C"};
-    const them = {appearance: opponent.appearance, kit: opponent.kit};
+    const me = {appearance: state.profile.appearance, kit: "#96C83C", outfit: outfitLooks(state)};
+    const them = {appearance: opponent.appearance, kit: opponent.kit, outfit: opponentOutfit(opponent.kit)};
 
     // During the animation show the kick that just happened, otherwise the upcoming one.
     const shownSide = animating && lastKick ? lastKick.side : turn === "shoot" ? "player" : "opponent";
@@ -185,7 +192,7 @@ const MatchScreen = ({opponent, initialBoosterId}) => {
                             </div>
                         ) : null}
                     </div>
-                    <Keeper appearance={keeper.appearance} kit={keeper.kit}
+                    <Keeper appearance={keeper.appearance} outfit={keeper.outfit}
                             diveCol={animating && lastKick ? lastKick.diveCol : null}/>
                     <span className={`${styles.ball} ${animating ? styles.ballFlying : ""}`}
                           style={{transform: `translate(${ball.x - 14}px, ${ball.y - 14}px)`}}/>

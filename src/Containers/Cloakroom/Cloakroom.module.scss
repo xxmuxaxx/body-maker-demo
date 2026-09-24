@@ -17,16 +17,6 @@
   //overflow: hidden;
 }
 
-.shirt {
-  position: absolute;
-  top: 180px;
-  left: 50%;
-  display: block;
-  width: auto;
-  height: 216px;
-  transform: translateX(calc(-50% - 4px));
-}
-
 .bodyCell {
   position: absolute;
   cursor: pointer;
@@ -91,28 +81,28 @@
   top: 184px;
   left: 220px;
   width: 235px;
-  height: 213px;
+  height: 156px;
 }
 
 .cell-shorts {
-  top: 402px;
-  left: 262px;
-  width: 150px;
-  height: 64px;
+  top: 344px;
+  left: 270px;
+  width: 130px;
+  height: 68px;
 }
 
 .cell-gloves {
-  top: 330px;
-  left: 470px;
-  width: 72px;
-  height: 72px;
+  top: 372px;
+  left: 440px;
+  width: 64px;
+  height: 64px;
 }
 
 .cell-boots {
-  top: 590px;
+  top: 596px;
   left: 262px;
   width: 150px;
-  height: 60px;
+  height: 52px;
 }
 
 .cellTitle {

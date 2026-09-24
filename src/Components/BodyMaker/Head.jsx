@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useId } from "react";
 
 import styles from "./index.module.scss";
 
@@ -12,10 +12,17 @@ const Head = ({
   showBrows  = true,
   eyesColor = "#492B15",
   mouthColor = "#D9A191",
+  className = styles.head,
+  x,
+  y,
 }) => {
+  const id = useId();
+
   return (
     <svg
-      className={styles.head}
+      className={className || undefined}
+      x={x}
+      y={y}
       width="57"
       height="91"
       viewBox="0 0 57 91"
@@ -41,13 +48,13 @@ const Head = ({
       {showHair && (
         <path
           d="M52.957 28.2864C51.6387 21.8113 48.1782 13.3691 36.0663 10.9922C34.0888 15.1723 28.7332 24.1883 34.9127 21.8933C43.3993 18.6967 47.4366 28.0405 47.6014 33.2862C47.8486 38.5318 51.062 42.7939 50.9796 49.4329H51.9683C53.1218 42.7939 54.2753 35.0074 52.957 28.2864Z"
-          fill="url(#paint0_linear)"
+          fill={`url(#${id}-0)`}
         />
       )}
       {showHair && (
         <path
           d="M4.83895 28.2864C6.15725 21.8113 9.6178 13.3691 21.7297 10.9922C23.7072 15.1723 29.0628 24.1883 22.8832 21.8933C14.3966 18.6967 10.3593 28.0405 10.1946 33.2862C9.86498 38.6138 6.65162 42.8759 6.73401 49.5149H5.74528C4.67416 42.7939 3.52065 35.0074 4.83895 28.2864Z"
-          fill="url(#paint1_linear)"
+          fill={`url(#${id}-1)`}
         />
       )}
       {showHair && (
@@ -291,7 +298,7 @@ const Head = ({
       />
       <defs>
         <linearGradient
-          id="paint0_linear"
+          id={`${id}-0`}
           x1="42.7839"
           y1="10.9922"
           x2="42.7839"
@@ -302,7 +309,7 @@ const Head = ({
           <stop offset="1" stopColor="#D8AC96" stopOpacity="0" />
         </linearGradient>
         <linearGradient
-          id="paint1_linear"
+          id={`${id}-1`}
           x1="15.0108"
           y1="10.9922"
           x2="15.0108"

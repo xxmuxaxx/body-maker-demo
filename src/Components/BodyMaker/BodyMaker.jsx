@@ -1,19 +1,21 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
 
-import Head from "./Head";
-import Body from "./Body";
+import Character from "./Character";
 import Input from "../utils/Input/Input";
 import Radios from "../utils/Radios/Radios";
 
 import styles from "./index.module.scss";
 import BodyChangeColor from "./BodyChangeColor";
 import { useGameStore } from "../../store/gameStore";
+import { outfitLooks } from "../../game/stats";
 
 const BodyMaker = () => {
   const navigate = useNavigate();
   const profile = useGameStore((state) => state.profile);
   const saveProfile = useGameStore((state) => state.saveProfile);
+  const inventory = useGameStore((state) => state.inventory);
+  const equipped = useGameStore((state) => state.equipped);
 
   const [nickname, setNickname] = useState(profile.nickname);
   const [sex, setSex] = useState(profile.sex);
@@ -213,8 +215,7 @@ const BodyMaker = () => {
       </div>
 
       <div className={styles.field}>
-        <Body bodyColor={appearance.bodyColor} />
-        <Head {...appearance} />
+        <Character appearance={appearance} outfit={outfitLooks({ inventory, equipped })} />
       </div>
     </div>
   );
