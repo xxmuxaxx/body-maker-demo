@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react'
-import {animated, useSpring} from "react-spring";
+import {animated, useSpring} from "@react-spring/web";
 
 import Card from "../Card/Card";
 
@@ -19,15 +19,15 @@ const Gifts = ({isOpen, items, onClose}) => {
 
     useEffect(() => {
         if (isOpen) {
-            giftListStyleAnimate({delay: 1000, transform: 'scale(1)'})
-            giftCloseAnimate({opacity: 1, delay: 2000})
-            giftStarAnimate({opacity: 0.26})
-            giftCapAnimate({opacity: 1, transform: 'rotate(0) translate(-50%, -20%)'})
+            giftListStyleAnimate.start({delay: 1000, transform: 'scale(1)'})
+            giftCloseAnimate.start({opacity: 1, delay: 2000})
+            giftStarAnimate.start({opacity: 0.26})
+            giftCapAnimate.start({opacity: 1, transform: 'rotate(0) translate(-50%, -20%)'})
         } else {
-            giftListStyleAnimate({transform: 'scale(0)'})
-            giftCloseAnimate({opacity: 0})
-            giftStarAnimate({opacity: 0})
-            giftCapAnimate({
+            giftListStyleAnimate.start({transform: 'scale(0)'})
+            giftCloseAnimate.start({opacity: 0})
+            giftStarAnimate.start({opacity: 0})
+            giftCapAnimate.start({
                 opacity: 0,
                 transform: 'rotate(27deg) translate(-22%, 135%)'
             })
