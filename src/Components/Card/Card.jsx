@@ -1,36 +1,46 @@
 import React from 'react';
 
-import styles from './Card.module.scss'
 import Button from "../utils/Button/Button";
+import {imageUrl} from "../../data/images";
+import {RARITY_TITLES, SLOTS} from "../../game/catalog";
+import {STAT_KEYS, STAT_TITLES} from "../../game/stats";
 
-const Card = ({item, showButton, hideButton, onHide, onShow}) => {
+import styles from './Card.module.scss'
+
+const formatStat = (value) => value > 0 ? `+${value}` : value;
+
+// item: catalog entry. action: optional { label, onClick, disabled }.
+const Card = ({item, action, isNew, note}) => {
+    const img = imageUrl(item.img);
+    const slotTitle = SLOTS.find((slot) => slot.id === item.slot)?.title;
+
     return (
-        <div className={styles.wrapper}>
+        <div className={`${styles.wrapper} ${styles[item.rarity] ?? ''}`}>
             <div className={styles.imageWrapper}>
-                <img src={item.img} className={styles.image} alt=""/>
+                {img
+                    ? <img src={img} className={styles.image} alt=""/>
+                    : <span className={styles.placeholder}>{slotTitle}</span>}
+                {isNew ? <span className={styles.badge}>Новое</span> : null}
             </div>
 
+            {item.rarity ? <p className={styles.rarity}>{RARITY_TITLES[item.rarity]}</p> : null}
             <p className={styles.title}>{item.title}</p>
 
             <ul className={styles.list}>
-                <li className={styles.listItem}>
-                    <span>Защита</span>
-                    <span>{item.defense > 0 ? `+${item.defense}` : item.defense}</span>
-                </li>
-                <li className={styles.listItem}>
-                    <span>Ловкость</span>
-                    <span>{item.agility > 0 ? `+${item.agility}` : item.agility}</span>
-                </li>
-                <li className={styles.listItem}>
-                    <span>Нападение</span>
-                    <span className={`${item.attack <= 0 ? styles.loh : null}`}>
-                        {item.attack > 0 ? `+${item.attack}` : item.attack}
-                    </span>
-                </li>
+                {STAT_KEYS.map((key) => (
+                    <li className={styles.listItem} key={key}>
+                        <span>{STAT_TITLES[key]}</span>
+                        <span className={item.stats[key] <= 0 ? styles.muted : undefined}>
+                            {formatStat(item.stats[key])}
+                        </span>
+                    </li>
+                ))}
             </ul>
 
-            {showButton ? <Button onClick={() => onShow(item)}>Надеть</Button> : null}
-            {hideButton ? <Button onClick={onHide}>Снять</Button> : null}
+            {note ? <p className={styles.note}>{note}</p> : null}
+            {action
+                ? <Button onClick={action.onClick} disabled={action.disabled}>{action.label}</Button>
+                : null}
         </div>
     )
 }

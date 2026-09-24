@@ -17,3 +17,14 @@
 .grayBorder {
   border: 2px solid rgba(#ffffff, .1);
 }
+
+.filled {
+  background: linear-gradient(263.06deg, #96C83C 18.87%, #26C273 78.51%);
+  border-color: transparent;
+  color: #202324;
+}
+
+.button:disabled {
+  opacity: .4;
+  cursor: not-allowed;
+}

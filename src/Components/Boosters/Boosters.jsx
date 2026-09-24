@@ -1,25 +1,35 @@
 import React from 'react'
+import {useNavigate} from "react-router";
 
 import Button from "../utils/Button/Button";
+import {boosters} from "../../game/catalog";
+import {imageUrl} from "../../data/images";
+import {useGameStore} from "../../store/gameStore";
 
 import styles from './Boosters.module.scss'
 
-import img1 from '../../assets/img/booster-img-1.png';
-import img2 from '../../assets/img/booster-img-2.png';
+const Boosters = (props) => {
+    const navigate = useNavigate();
+    const counts = useGameStore((state) => state.boosters);
 
-const Boosters = ({onClick, ...props}) => {
     return (
         <div className={styles.list} {...props}>
-            <div className={styles.card}>
-                <p className={styles.cardTitle}>Бустер от тренера</p>
-                <img src={img1} className={styles.cardImage} alt="img1"/>
-                <Button onClick={onClick}>Смотреть!</Button>
-            </div>
-            <div className={styles.card}>
-                <p className={styles.cardTitle}>Новый бустер</p>
-                <img src={img2} className={styles.cardImage} alt="img1"/>
-                <Button>Смотреть!</Button>
-            </div>
+            {boosters.map((booster) => {
+                const count = counts[booster.id] ?? 0;
+                return (
+                    <div className={`${styles.card} ${count ? "" : styles.cardEmpty}`} key={booster.id}>
+                        <p className={styles.cardTitle}>{booster.title}</p>
+                        <p className={styles.cardDescription}>{booster.description}</p>
+                        <div className={styles.cardImageWrapper}>
+                            <img src={imageUrl(booster.img)} className={styles.cardImage} alt=""/>
+                            <span className={styles.cardCount}>×{count}</span>
+                        </div>
+                        <Button disabled={!count} onClick={() => navigate(`/match?booster=${booster.id}`)}>
+                            В поединок
+                        </Button>
+                    </div>
+                );
+            })}
         </div>
     )
 }

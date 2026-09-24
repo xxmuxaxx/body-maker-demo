@@ -1,0 +1,50 @@
+[
+  {
+    "id": "yard-vasya", "name": "Дворовый Вася", "minRank": 0,
+    "description": "Бьёт сильно, но куда придётся.",
+    "stats": { "attack": 2, "defense": 2, "agility": 2 },
+    "reward": { "xp": 60, "coins": 30 },
+    "appearance": { "bodyColor": "#EDC4B0", "hairColor": "#CD9607", "showHair": true, "beardColor": "#CD9607", "showBeard": false, "browsColor": "#CD9607", "showBrows": true, "eyesColor": "#00CFDC", "mouthColor": "#D9A191" },
+    "kit": "#DE5D00"
+  },
+  {
+    "id": "school-star", "name": "Школьная звезда Петя", "minRank": 0,
+    "description": "Лучший бомбардир школьной лиги.",
+    "stats": { "attack": 6, "defense": 4, "agility": 5 },
+    "reward": { "xp": 90, "coins": 45 },
+    "appearance": { "bodyColor": "#AC6948", "hairColor": "#202324", "showHair": true, "beardColor": "#202324", "showBeard": false, "browsColor": "#202324", "showBrows": true, "eyesColor": "#492B15", "mouthColor": "#703001" },
+    "kit": "#00CFDC"
+  },
+  {
+    "id": "factory-captain", "name": "Капитан заводской команды", "minRank": 1,
+    "description": "Опытный и хитрый: часто бьёт в «девятку».",
+    "stats": { "attack": 9, "defense": 7, "agility": 7 },
+    "reward": { "xp": 130, "coins": 65 },
+    "appearance": { "bodyColor": "#EDC4B0", "hairColor": "#492B15", "showHair": false, "beardColor": "#492B15", "showBeard": true, "browsColor": "#492B15", "showBrows": true, "eyesColor": "#492B15", "mouthColor": "#D9A191" },
+    "kit": "#C60000"
+  },
+  {
+    "id": "brazil-legionnaire", "name": "Легионер из Бразилии", "minRank": 2,
+    "description": "Техничный и быстрый, хорошо читает удары.",
+    "stats": { "attack": 12, "defense": 9, "agility": 12 },
+    "reward": { "xp": 180, "coins": 90 },
+    "appearance": { "bodyColor": "#492B15", "hairColor": "#202324", "showHair": true, "beardColor": "#202324", "showBeard": true, "browsColor": "#202324", "showBrows": true, "eyesColor": "#202324", "mouthColor": "#703001" },
+    "kit": "#F9D34B"
+  },
+  {
+    "id": "national-veteran", "name": "Ветеран сборной", "minRank": 3,
+    "description": "Видел всё. Почти не ошибается.",
+    "stats": { "attack": 15, "defense": 14, "agility": 13 },
+    "reward": { "xp": 250, "coins": 120 },
+    "appearance": { "bodyColor": "#EDC4B0", "hairColor": "#DEDEDE", "showHair": true, "beardColor": "#DEDEDE", "showBeard": true, "browsColor": "#DEDEDE", "showBrows": true, "eyesColor": "#1A00B8", "mouthColor": "#D9A191" },
+    "kit": "#1A00B8"
+  },
+  {
+    "id": "golden-ball", "name": "Обладатель «Золотого мяча»", "minRank": 4,
+    "description": "Финальный босс. Удачи.",
+    "stats": { "attack": 19, "defense": 17, "agility": 18 },
+    "reward": { "xp": 350, "coins": 180 },
+    "appearance": { "bodyColor": "#AC6948", "hairColor": "#CD9607", "showHair": true, "beardColor": "#492B15", "showBeard": true, "browsColor": "#492B15", "showBrows": true, "eyesColor": "#05B517", "mouthColor": "#703001" },
+    "kit": "#CD9607"
+  }
+]

@@ -290,3 +290,39 @@ body {
   box-shadow: 0px -8px 8px rgba(0, 0, 0, 0.25);
   border-radius: 0 0 8px 8px;
 }
+.points-panel__hint {
+  margin: 0 0 24px 0;
+  font-size: 12px;
+  line-height: 16px;
+  color: #717171;
+}
+
+.points-panel__item-value {
+  font-size: 12px;
+  color: rgba(#ffffff, .6);
+}
+
+.points-panel__plus {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: 2px solid #96C83C;
+  border-radius: 50%;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 1;
+  color: #96C83C;
+  cursor: pointer;
+}
+
+.clothes-modal__empty {
+  padding: 0 64px;
+  color: rgba(#ffffff, .6);
+
+  a {
+    color: #96C83C;
+  }
+}

@@ -1,7 +1,7 @@
 .list {
   display: grid;
   max-width: 1000px;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
 
@@ -28,4 +28,31 @@
   display: block;
   width: auto;
   height: auto;
+}
+
+.cardEmpty {
+  opacity: .5;
+}
+
+.cardDescription {
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 18px;
+  text-align: center;
+  color: rgba(#ffffff, .6);
+}
+
+.cardImageWrapper {
+  position: relative;
+}
+
+.cardCount {
+  position: absolute;
+  right: -8px;
+  bottom: 16px;
+  padding: 2px 10px;
+  background: #202324;
+  border-radius: 50px;
+  font-weight: 700;
+  color: #96C83C;
 }

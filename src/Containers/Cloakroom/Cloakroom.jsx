@@ -5,55 +5,35 @@ import BoostersPanel from "../../Components/BoostersPanel";
 import PointsPanel from "../../Components/PointsPanel";
 import {Body, Head} from "../../Components/BodyMaker";
 import Card from "../../Components/Card/Card";
+import ClothesModal from "../../Components/ClothesModal";
+import {itemsById, SLOTS} from "../../game/catalog";
+import {imageUrl} from "../../data/images";
+import {useGameStore} from "../../store/gameStore";
 
-import shirt from "../../assets/img/shirt1.svg";
-import shirt2 from "../../assets/img/shirt2.svg";
 import plus from "../../assets/img/plus.svg";
 import minus from "../../assets/img/minus.svg";
 import styles from "./Cloakroom.module.scss";
-import ClothesModal from "../../Components/ClothesModal";
-
-const clothesData = {
-    shirt: [
-        {
-            title: "Фирменная футболка Betunlim",
-            img: shirt,
-            defense: 10,
-            agility: 5,
-            attack: 2,
-        },
-        {
-            title: "Фирменная футболка Betunlim 2",
-            img: shirt2,
-            defense: 10,
-            agility: 5,
-            attack: 2,
-        },
-    ],
-};
 
 const Cloakroom = () => {
-    const [clothes, setClothes] = useState({
-        shirt: clothesData.shirt[0],
-    });
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const appearance = useGameStore((state) => state.profile.appearance);
+    const inventory = useGameStore((state) => state.inventory);
+    const equipped = useGameStore((state) => state.equipped);
+    const unequip = useGameStore((state) => state.unequip);
+    const markSeen = useGameStore((state) => state.markSeen);
+    const [modalSlot, setModalSlot] = useState(null);
 
-    const onClickCellHandler = () => {
-        if (!clothes.shirt) {
-            setIsModalOpen(true)
-        }
-    }
+    const itemIn = (slot) => {
+        const entry = inventory.find((e) => e.uid === equipped[slot]);
+        return entry ? itemsById[entry.itemId] : null;
+    };
 
-    const onClickHideButtonHandler = () => {
-        if (clothes.shirt) {
-            setClothes((oldClothes) => ({...oldClothes, shirt: null}));
-        }
-    }
+    const shirt = itemIn("shirt");
+    const shorts = itemIn("shorts");
 
-    const onShowClickHandler = (item) => {
-        setClothes((oldClothes) => ({...oldClothes, shirt: item}))
-        setIsModalOpen(false)
-    }
+    const onCloseModal = () => {
+        setModalSlot(null);
+        markSeen();
+    };
 
     return (
         <div className={styles.wrapper}>
@@ -62,33 +42,39 @@ const Cloakroom = () => {
             <PointsPanel/>
 
             <div className={styles.field}>
-                <Body/>
-                {clothes.shirt ? (
-                    <img src={clothes.shirt.img} className={styles.shirt}/>
+                <Body bodyColor={appearance.bodyColor} shortsColor={shorts?.color}/>
+                {shirt?.overlay ? (
+                    <img src={imageUrl(shirt.overlay)} className={styles.shirt} alt=""/>
                 ) : null}
-                <Head/>
+                <Head {...appearance}/>
 
-                <div
-                    className={[
-                        styles.bodyCell,
-                        clothes.shirt ? null : styles.bodyCellEmpty,
-                    ].join(" ")}
-                    onClick={onClickCellHandler}
-                >
-                    <div className={styles.cellIcon}>
-                        {clothes.shirt ? <img src={minus}/> : <img src={plus}/>}
-                    </div>
-                    {
-                        clothes.shirt
-                            ? <div className={styles.cardWrapper}>
-                                <Card item={clothes.shirt} hideButton onHide={onClickHideButtonHandler}/>
+                {SLOTS.map((slot) => {
+                    const item = itemIn(slot.id);
+                    return (
+                        <div
+                            key={slot.id}
+                            className={[
+                                styles.bodyCell,
+                                styles[`cell-${slot.id}`],
+                                item ? null : styles.bodyCellEmpty,
+                            ].filter(Boolean).join(" ")}
+                            onClick={() => setModalSlot(slot.id)}
+                            title={item ? item.title : `${slot.title}: выбрать`}
+                        >
+                            <div className={styles.cellIcon}>
+                                <img src={item ? minus : plus} alt=""/>
                             </div>
-                            : null
-                    }
-                </div>
+                            {item ? null : <span className={styles.cellTitle}>{slot.title}</span>}
+                            {item ? (
+                                <div className={styles.cardWrapper} onClick={(event) => event.stopPropagation()}>
+                                    <Card item={item} action={{label: "Снять", onClick: () => unequip(slot.id)}}/>
+                                </div>
+                            ) : null}
+                        </div>
+                    );
+                })}
             </div>
-            <ClothesModal isOpen={isModalOpen} clothes={clothesData.shirt}
-                          onShow={(item) => onShowClickHandler(item)}/>
+            <ClothesModal slot={modalSlot} onClose={onCloseModal}/>
         </div>
     );
 };

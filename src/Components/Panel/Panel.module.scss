@@ -62,6 +62,7 @@
 
 .infoLeft {
   display: flex;
+  text-decoration: none;
   width: 124px;
   min-width: 124px;
   height: 184px;
@@ -73,7 +74,15 @@
 }
 
 .infoAvatar {
-  display: block;
+  position: relative;
+  width: 57px;
+  height: 91px;
+  transform: scale(1.1);
+
+  svg {
+    position: static !important;
+    transform: none !important;
+  }
 }
 
 .infoName {

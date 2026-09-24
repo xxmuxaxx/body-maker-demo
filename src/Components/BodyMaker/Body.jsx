@@ -2,7 +2,7 @@ import React from "react";
 
 import styles from "./index.module.scss";
 
-const Body = ({ bodyColor = '#EDC4B0' }) => {
+const Body = ({ bodyColor = '#EDC4B0', shortsColor = '#CACACA' }) => {
   return (
     <svg
       className={styles.body}
@@ -37,7 +37,7 @@ const Body = ({ bodyColor = '#EDC4B0' }) => {
         fillRule="evenodd"
         clipRule="evenodd"
         d="M134.65 229.692L48.5375 229.837L48.4442 230.378L47.0968 229.378C47.0968 229.378 34.7618 271.179 37.0045 302.188L90.9902 305.684L94.0712 290.071C95.121 290.557 96.7452 290.92 99.1388 290.561L100.763 305.684L149.622 302.644C149.622 302.644 150.904 247.163 138.409 227.858L134.65 229.692Z"
-        fill="#CACACA"
+        fill={shortsColor}
       />
     </svg>
   );
