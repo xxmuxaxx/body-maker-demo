@@ -59,7 +59,17 @@ export const createClient = ({ url, auth, fetchImpl = fetch, pollMs = 1500, time
     return download(image);
   };
 
+  // Uploads a PNG into ComfyUI's input folder so LoadImage / LoadImageMask can use it.
+  const upload = async (buffer, name) => {
+    const form = new FormData();
+    form.append("image", new Blob([buffer], { type: "image/png" }), name);
+    form.append("overwrite", "true");
+    const { name: stored, subfolder } = await json("/upload/image", { method: "POST", body: form });
+    return subfolder ? `${subfolder}/${stored}` : stored;
+  };
+
   return {
+    upload,
     systemStats: () => json("/system_stats"),
     checkpoints: async () => {
       const info = await json("/object_info/CheckpointLoaderSimple");
