@@ -3,11 +3,11 @@ import React, {useState} from "react";
 import TopBanner from "../../Components/TopBanner";
 import BoostersPanel from "../../Components/BoostersPanel";
 import PointsPanel from "../../Components/PointsPanel";
-import {Body, Head} from "../../Components/BodyMaker";
+import {Character} from "../../Components/BodyMaker";
 import Card from "../../Components/Card/Card";
 import ClothesModal from "../../Components/ClothesModal";
 import {itemsById, SLOTS} from "../../game/catalog";
-import {imageUrl} from "../../data/images";
+import {outfitItems} from "../../game/stats";
 import {useGameStore} from "../../store/gameStore";
 
 import plus from "../../assets/img/plus.svg";
@@ -15,7 +15,7 @@ import minus from "../../assets/img/minus.svg";
 import styles from "./Cloakroom.module.scss";
 
 const Cloakroom = () => {
-    const appearance = useGameStore((state) => state.profile.appearance);
+    const {appearance, sex, bodyType} = useGameStore((state) => state.profile);
     const inventory = useGameStore((state) => state.inventory);
     const equipped = useGameStore((state) => state.equipped);
     const unequip = useGameStore((state) => state.unequip);
@@ -26,9 +26,6 @@ const Cloakroom = () => {
         const entry = inventory.find((e) => e.uid === equipped[slot]);
         return entry ? itemsById[entry.itemId] : null;
     };
-
-    const shirt = itemIn("shirt");
-    const shorts = itemIn("shorts");
 
     const onCloseModal = () => {
         setModalSlot(null);
@@ -42,11 +39,7 @@ const Cloakroom = () => {
             <PointsPanel/>
 
             <div className={styles.field}>
-                <Body bodyColor={appearance.bodyColor} shortsColor={shorts?.color}/>
-                {shirt?.overlay ? (
-                    <img src={imageUrl(shirt.overlay)} className={styles.shirt} alt=""/>
-                ) : null}
-                <Head {...appearance}/>
+                <Character appearance={appearance} sex={sex} bodyType={bodyType} outfit={outfitItems({inventory, equipped})}/>
 
                 {SLOTS.map((slot) => {
                     const item = itemIn(slot.id);

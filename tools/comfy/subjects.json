@@ -1,0 +1,33 @@
+{
+  "_comment": "English prompt subjects for generated art, keyed by catalog id. Style prompts live in style.json.",
+  "items": {
+    "training-shirt": "plain white training football jersey with short sleeves, bold dark grey outline around the whole shirt",
+    "england-shirt": "white football jersey with thin red collar and red sleeve cuffs, bold dark grey outline around the whole shirt",
+    "saudi-shirt": "green football jersey with white collar and white side stripes",
+    "club-shirt": "lime green to teal gradient football jersey with dark trim",
+    "captain-shirt": "white football jersey with golden trim and a golden captain armband on the sleeve",
+    "training-shorts": "plain green football shorts",
+    "portugal-shorts": "dark green football shorts with a thin red side stripe",
+    "brazil-shorts": "bright yellow football shorts with blue waistband",
+    "lightning-shorts": "pair of deep blue football shorts with yellow lightning bolt prints on the legs, front view",
+    "studs-boots": "pair of black football boots with white studs, side view",
+    "speed-boots": "pair of sleek neon green lightweight football boots",
+    "golden-boots": "pair of shiny golden football boots",
+    "keeper-gloves": "pair of simple grey goalkeeper gloves",
+    "grip-gloves": "pair of teal goalkeeper gloves with textured grip palms",
+    "wall-gloves": "pair of massive black and gold goalkeeper gloves"
+  },
+  "boosters": {
+    "coach": "silver coach whistle on a green lanyard",
+    "energy": "energy drink can with a lightning bolt label",
+    "focus": "coach tactics clipboard with a soccer formation of dots and arrows drawn on a green pitch"
+  },
+  "opponents": {
+    "yard-vasya": "young scrappy street footballer, messy blond hair, freckles, orange t-shirt, cheeky grin",
+    "school-star": "confident teenage school football star, short black hair, cyan jersey",
+    "factory-captain": "stocky bald amateur team captain with a thick brown beard, red jersey, captain armband",
+    "brazil-legionnaire": "skilful brazilian footballer with dark skin, black hair and beard, yellow jersey, big smile",
+    "national-veteran": "seasoned veteran footballer with grey hair and grey beard, blue national team jersey, calm stare",
+    "golden-ball": "superstar footballer holding a golden ball trophy, styled blond hair, golden jersey, proud look"
+  }
+}

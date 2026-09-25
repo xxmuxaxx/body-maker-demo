@@ -171,6 +171,7 @@ $bad: #E5484D;
   svg {
     position: static !important;
     transform: none !important;
+    filter: drop-shadow(1.5px 0 0 #16181a) drop-shadow(-1.5px 0 0 #16181a) drop-shadow(0 1.5px 0 #16181a) drop-shadow(0 -1.5px 0 #16181a);
   }
 }
 
@@ -339,36 +340,16 @@ $bad: #E5484D;
 .keeper {
   position: absolute;
   left: 50%;
-  top: 150px;
-  width: 70px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  top: 92px;
+  width: 71px;
   transform-origin: 50% 80%;
   transition: transform .35s ease-out;
   z-index: 2;
   pointer-events: none;
-}
-
-.keeperHead {
-  position: relative;
-  width: 57px;
-  height: 91px;
-  margin-bottom: -38px;
-  transform: scale(.55);
-  transform-origin: bottom center;
 
   svg {
-    position: static !important;
-    transform: none !important;
+    display: block;
   }
-}
-
-.keeperBody {
-  width: 56px;
-  height: 64px;
-  border-radius: 22px 22px 6px 6px;
-  box-shadow: inset 0 -12px 0 rgba(0, 0, 0, .25);
 }
 
 .ball {
@@ -532,4 +513,11 @@ $bad: #E5484D;
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.portraitArt {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
 }

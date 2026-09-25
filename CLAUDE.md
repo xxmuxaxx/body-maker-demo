@@ -9,8 +9,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `yarn preview`: serve the built `dist/`
 - `yarn lint`: ESLint (flat config in `eslint.config.js`)
 - `yarn test`: Vitest, run once (`npx vitest run src/game/penalty.test.js` for a single file)
+- `yarn gen:art`: generate art with ComfyUI (needs `COMFY_URL`, optional `COMFY_AUTH=user:pass`). See `tools/comfy/generate.mjs` for options.
+- `yarn gen:character base|items|pick`: build the layered raster character (see "Character" below and `tools/comfy/character.mjs`).
 
 To verify a change, run `yarn lint && yarn test && yarn build` and check the page in the browser.
+
+Deploy: `.github/workflows/deploy.yml` builds with `BASE_PATH=/<repo>/` and publishes to GitHub Pages on every push to `master`. `vite.config.js` reads `BASE_PATH`, and `App.jsx` passes Vite's `BASE_URL` to the router as `basename`. The workflow copies `index.html` to `404.html` so deep links work. Keep links inside the app going through the router, and assets going through imports, so they follow the base path.
 
 ## Architecture
 
@@ -29,7 +33,24 @@ Routing is in `src/App.jsx` and uses `react-router` (v7+ API, imported from `"re
 - `/match` and `/match/:opponentId?booster=id`: `Containers/Match`, the opponent list and the shootout screen
 - `/stats`: `Containers/Stats`
 
-The character is inline SVG (`BodyMaker/Head.jsx`, `Body.jsx`), colored by props. Shorts color comes from the item's `color`. The shirt is an image overlay taken from the item's `overlay`.
+Generated art lives in `src/assets/gen/<kind>/<id>.webp` (kind = items, boosters, opponents). `artUrl(kind, entry)` from `src/data/images.js` prefers it over the entry's `img`, and opponent portraits use it instead of the SVG head. The pipeline is in `tools/comfy/`: `subjects.json` has English prompts per catalog id (every catalog entry needs one; a test checks this), `style.json` has the per-kind style, `workflows/txt2img.json` is the API-format workflow with `{{placeholders}}`, and `postprocess.mjs` cuts out the white background with sharp. Never commit ComfyUI credentials.
+
+### Character
+
+`BodyMaker/Character.jsx` draws the character as one SVG in body coordinates (the 191x532 space of `Body.jsx`; shared shapes and `CHARACTER_CANVAS` live in `bodyPaths.js`). It has two modes:
+- **Raster** (used when the base for the profile's sex and body type exists; see `characterLayers.js`): there is one base per sex and body type (`man-1` … `woman-3`, folders under `src/assets/character/`, listed in `manifest.json`). The generated body `base.webp` is recolored to `appearance.bodyColor` by an `feColorMatrix` luminance tint (`tintMatrix`, reference `skinLum` from the manifest). Clothing layers `<itemId>.webp` go on top in this order: `underwear-top.webp` (the women's sports top, only when no shirt is worn), shirt, then shorts (or the grey `underwear.webp`), boots, gloves. Last comes the head. When a generated head exists for the appearance (`headKeyFor`: `woman-<femaleHair>` or `man-<maleHair>`, bald when `showHair` is false), `GeneratedHead.jsx` draws its skin and hair layers tinted with `bodyColor` and `hairColor` (brows follow the hair), the untinted ink layer, and for men an optional beard overlay `man-beard-<beardStyle>` tinted with `beardColor`. Otherwise the SVG `Head` is drawn with the ink outline; for women its `hairStyle="long"` gives long hair, thinner brows and lashes. `HeadAvatar` draws just the head for the sidebar and match portraits. With generated heads the body maker offers hairstyles (and beard styles for men) and hides the SVG-only brow, eye and lip colors. An outfit entry with `tint` recolors a neutral layer; opponents use this with `kit-shirt`/`kit-shorts`. An item without a layer falls back to its SVG piece from `Outfit.jsx`.
+- **SVG** (fallback): `Body.jsx` (cel-shaded rim), `Outfit.jsx` (clothes drawn from each item's `look`) and `Head.jsx` under one ink-outline filter.
+
+Each item in `items.json` has a `look` (`base`, plus optional `base2`, `trim`, `accent`, `sole`, `armband`, `emblem` and a `pattern` such as `gradient`, `sideStripes`, `hoops`, `sideStripe` or `lightning`) for the SVG mode and fallbacks. `outfitItems(state)` from `game/stats.js` maps equipped slots to `{ id, look }`. SVG ids come from `useId`, because several characters can be on the page at once.
+
+The raster layers are made by `tools/comfy/character.mjs` (bases and prompts are in `tools/comfy/character.json`):
+1. `bases` makes base variants. `man-1` is a Krea 2 img2img of the rendered SVG body (`tools/comfy/character/base-input.png`); the other bases are Klein edits of their `from` base (thinner, heavier, female). `pick-base key=seed` stores the chosen base in `tools/comfy/character/bases/<key>.png`, and `layers.mjs` then removes the background and the generated head, and splits the grey underwear into bottom and top.
+2. `items --base=<key|all>` Klein-edits each base once per seed, loops over items first so bases of the same sex reuse the encoded prompt, and writes review sheets to `tools/comfy/character/variants/<key>/`.
+3. `pick --base=<key> id=seed` (or `--all=<seed>`) keeps the pixels the edit changed inside the slot area (from the SVG silhouettes), then records the seed and the layer's `refLum` in the manifest.
+
+4. `heads [--sex=man|woman]` Klein-edits a copy of the `from` base whose clothes are recolored to magenta (`source`), once per hairstyle and seed. The hair is ash grey on purpose. `pick-head <sex>-<style>=<seed>` cuts it into `skin`, `hair` and `ink` layers (`splitHead`; the eye boxes per sex are in `character.json`). For men, `beards` edits the picked `beardOn` head, and `pick-beard <style>=<seed>` keeps what changed around the jaw as `man-beard-<style>/beard.webp`.
+
+To add an item: add its subject, run `items --id=<id>` (all bases), look at the sheets, then run `pick` for each base.
 
 ## Conventions
 

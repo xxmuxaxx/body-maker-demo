@@ -24,4 +24,17 @@ export default [
       "react-refresh/only-export-components": ["warn", { allowConstantExport: true }],
     },
   },
+  {
+    files: ["*.config.js"],
+    languageOptions: { globals: globals.node },
+  },
+  {
+    files: ["tools/**/*.mjs"],
+    languageOptions: {
+      ecmaVersion: "latest",
+      sourceType: "module",
+      globals: globals.node,
+    },
+    rules: js.configs.recommended.rules,
+  },
 ];

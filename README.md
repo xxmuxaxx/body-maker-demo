@@ -20,6 +20,8 @@
 - **Ловкость**: шанс взять мяч, если угадал угол;
 - **Защита**: соперник чаще промахивается.
 
+Демо: https://xxmuxaxx.github.io/body-maker-demo/
+
 ## Стек
 
 - [React 19](https://react.dev/)
@@ -72,3 +74,52 @@ src/
 
 Вещи, соперники, бустеры и ранги описаны в `src/data/*.json`. Картинки указываются именем файла
 из `src/assets/img/`. Если у вещи нет картинки, на карточке показывается название слота.
+
+## Генерация картинок (ComfyUI)
+
+Картинки для вещей, бустеров и соперников можно сгенерировать через ComfyUI:
+
+```bash
+export COMFY_URL=https://<твой-домен>.ngrok-free.dev
+export COMFY_AUTH=user:password          # если на тоннеле basic auth
+
+yarn gen:art --check                     # проверить связь и список моделей
+yarn gen:art --dry-run                   # показать промпты без генерации
+yarn gen:art --only=boosters             # сгенерировать бустеры
+yarn gen:art --id=golden-boots --force   # перегенерировать одну вещь
+yarn gen:art --id=golden-boots --force --reroll=2   # другой вариант (другой seed)
+```
+
+- Файлы сохраняются в `src/assets/gen/<kind>/<id>.webp` с прозрачным фоном. Если такой файл есть,
+  он заменяет картинку из каталога. Если удалить файл, вернётся исходная картинка.
+- Промпты: `tools/comfy/subjects.json` (что нарисовать) и `tools/comfy/style.json` (общий стиль).
+- Workflow по умолчанию: `tools/comfy/workflows/txt2img.json`. Свой workflow в API-формате
+  с плейсхолдерами `{{positive}}`, `{{seed}}` и т. д. можно подключить через `COMFY_WORKFLOW=path.json`.
+- Готовый workflow под Krea 2 Turbo (8 шагов, cfg 1, без негативного промпта): `tools/comfy/workflows/krea2-turbo.json`.
+  Запуск: `COMFY_WORKFLOW=tools/comfy/workflows/krea2-turbo.json COMFY_CHECKPOINT=krea2_turbo_fp8_scaled.safetensors yarn gen:art ...`
+  (`COMFY_CHECKPOINT` здесь нужен только для выбора размера 1024×1024, модели прописаны в самом workflow).
+- Модель берётся из `COMFY_CHECKPOINT`. Если переменная не задана, выбирается первый SDXL-подобный
+  checkpoint на сервере.
+
+## Персонаж из слоёв
+
+Тело и одежда персонажа тоже генерируются через ComfyUI: Krea 2 стилизует SVG-тело,
+а Flux 2 Klein «надевает» на него каждую вещь. Голова остаётся SVG, цвет кожи
+перекрашивается в браузере.
+
+```bash
+yarn gen:character bases --id=woman-2                 # варианты базы + лист для выбора
+yarn gen:character pick-base woman-2=3                # выбрать базу и разрезать её на слои
+yarn gen:character items --id=golden-boots            # вещь на всех базах
+yarn gen:character pick --base=woman-2 golden-boots=1 # сохранить вариант как слой
+```
+
+Баз шесть: мужская и женская в трёх телосложениях (`man-1` … `woman-3`).
+
+Слои лежат в `src/assets/character/`. Если у вещи нет слоя, на персонаже рисуется её SVG-версия.
+
+## Публикация
+
+Сайт собирается и выкладывается на GitHub Pages workflow `.github/workflows/deploy.yml`
+при каждом пуше в `master` (или вручную из вкладки Actions). В настройках репозитория
+Pages должен брать сайт из GitHub Actions: Settings → Pages → Source: GitHub Actions.

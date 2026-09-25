@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Button from "../utils/Button/Button";
-import {imageUrl} from "../../data/images";
+import {artUrl} from "../../data/images";
 import {RARITY_TITLES, SLOTS} from "../../game/catalog";
 import {STAT_KEYS, STAT_TITLES} from "../../game/stats";
 
@@ -11,7 +11,7 @@ const formatStat = (value) => value > 0 ? `+${value}` : value;
 
 // item: catalog entry. action: optional { label, onClick, disabled }.
 const Card = ({item, action, isNew, note}) => {
-    const img = imageUrl(item.img);
+    const img = artUrl("items", item);
     const slotTitle = SLOTS.find((slot) => slot.id === item.slot)?.title;
 
     return (

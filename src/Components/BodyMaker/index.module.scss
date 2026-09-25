@@ -68,3 +68,14 @@
   letter-spacing: 0.5px;
   cursor: pointer;
 }
+
+.character {
+  position: absolute;
+  top: 95px;
+  left: 50%;
+  transform: translateX(calc(-50% - 3px));
+}
+
+.subGroup {
+  margin-top: 12px;
+}

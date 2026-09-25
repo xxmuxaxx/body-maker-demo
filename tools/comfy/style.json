@@ -1,0 +1,18 @@
+{
+  "items": {
+    "positive": "{{subject}}, single game item icon, flat vector illustration, bold clean shapes, soft cel shading, centered, full object in frame, isolated on plain white background, high quality",
+    "size": [1024, 1024],
+    "removeBackground": true
+  },
+  "boosters": {
+    "positive": "{{subject}}, single game icon, flat vector illustration, bold clean shapes, soft cel shading, green and teal accents, centered, isolated on plain white background, high quality",
+    "size": [1024, 1024],
+    "removeBackground": true
+  },
+  "opponents": {
+    "positive": "{{subject}}, head and shoulders portrait, cartoon football game avatar, flat vector illustration, bold clean shapes, soft cel shading, facing camera, centered, isolated on plain white background, high quality",
+    "size": [1024, 1024],
+    "removeBackground": true
+  },
+  "negative": "text, letters, watermark, logo, signature, photo, photorealistic, blurry, lowres, cropped, multiple objects, frame, border, busy background, deformed"
+}

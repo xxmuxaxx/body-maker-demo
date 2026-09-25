@@ -1,0 +1,131 @@
+{
+  "_comment": "Klein edit prompts for the layered character. Items take their subject from subjects.json; extra layers are defined here. {person}/{his}/{Poss} and the shorts note depend on the base's sex.",
+  "keep": "Keep the pose, body proportions, arms, hands, face, feet, white background and the flat cartoon art style exactly unchanged.",
+  "prompts": {
+    "shirt": "Dress the {person} in a {subject}, short sleeves, tucked into {his} grey shorts. {keep}",
+    "shorts": "Replace {his} grey shorts with {subject}, the same length and fit as before. {shortsNote} {keep}",
+    "boots": "Put a {subject} on {his} bare feet. {keep}",
+    "gloves": "Put a {subject} on both of {his} hands. {keep}"
+  },
+  "extra": {
+    "kit-shirt": {
+      "slot": "shirt",
+      "subject": "plain white football jersey with a plain white collar, no logos"
+    },
+    "kit-shorts": {
+      "slot": "shorts",
+      "subject": "plain white football shorts, no logos"
+    }
+  },
+  "sexes": {
+    "man": {
+      "person": "man",
+      "his": "his",
+      "shortsNote": "He stays bare-chested."
+    },
+    "woman": {
+      "person": "woman",
+      "his": "her",
+      "shortsNote": "She keeps her grey sports top."
+    }
+  },
+  "bases": {
+    "man-1": {
+      "sex": "man",
+      "krea": {
+        "prompt": "full body flat vector cartoon illustration of an athletic young male football player standing straight, front view, arms relaxed at the sides, bare chest, plain grey shorts, barefoot, bold dark ink outlines, soft cel shading, clean simple shapes, mobile game character art, plain white background",
+        "denoise": 0.6,
+        "seed": 7
+      }
+    },
+    "man-2": {
+      "sex": "man",
+      "from": "man-1",
+      "prompt": "Make the man's build slim and lean (ectomorph): narrower shoulders, thinner arms and legs, slender muscles. Keep the pose, arm and leg positions, the head, the grey shorts, the white background and the flat cartoon art style exactly unchanged."
+    },
+    "man-3": {
+      "sex": "man",
+      "from": "man-1",
+      "prompt": "Make the man's build heavier and stockier (endomorph): wider waist, a soft round belly, thicker arms and legs. Keep the pose, arm and leg positions, the head, the grey shorts, the white background and the flat cartoon art style exactly unchanged."
+    },
+    "woman-1": {
+      "sex": "woman",
+      "from": "man-1",
+      "prompt": "Turn the man into an athletic young woman football player with a feminine figure, hair tied in a tight bun, wearing a plain grey sports bra top and the same grey shorts, barefoot. Keep the pose, arm and leg positions, the white background and the flat cartoon art style exactly unchanged."
+    },
+    "woman-2": {
+      "sex": "woman",
+      "from": "woman-1",
+      "prompt": "Make the woman's build slim and lean (ectomorph): narrower shoulders, thinner arms and legs. Keep the pose, arm and leg positions, the head, the grey sports top and shorts, the white background and the flat cartoon art style exactly unchanged."
+    },
+    "woman-3": {
+      "sex": "woman",
+      "from": "woman-1",
+      "prompt": "Make the woman's build curvier and heavier (endomorph): wider hips and waist, a soft belly, thicker arms and legs. Keep the pose, arm and leg positions, the head, the grey sports top and shorts, the white background and the flat cartoon art style exactly unchanged."
+    }
+  },
+  "heads": {
+    "woman": {
+      "from": "woman-1",
+      "styles": {
+        "bun": "Make her hair ash grey, tied in a neat bun on top of her head, with ash grey eyebrows. Keep her face shape, eyes, nose, mouth, expression, the pose, body, sports top and shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "long": "Give her long straight loose ash grey hair that falls over her shoulders, with ash grey eyebrows. Keep her face shape, eyes, nose, mouth, expression, the pose, body, sports top and shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "ponytail": "Give her ash grey hair pulled back into a high ponytail, with a few loose strands framing her face and ash grey eyebrows. Keep her face shape, eyes, nose, mouth, expression, the pose, body, sports top and shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "bob": "Give her a chin-length ash grey bob haircut with side-swept bangs and ash grey eyebrows. Keep her face shape, eyes, nose, mouth, expression, the pose, body, sports top and shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged."
+      },
+      "source": {
+        "from": "woman-1",
+        "seed": 1,
+        "prompt": "Change the color of her sports bra top and her shorts to bright solid magenta. Keep her face, hair, pose, body, the white background and the flat cartoon art style exactly unchanged."
+      },
+      "eyes": [
+        [
+          79,
+          43,
+          94,
+          51.5
+        ],
+        [
+          102,
+          43,
+          117,
+          51.5
+        ]
+      ]
+    },
+    "man": {
+      "from": "man-1",
+      "source": {
+        "from": "man-1",
+        "seed": 1,
+        "prompt": "Change the color of his shorts to bright solid magenta. Keep his face, hair, pose, body, the white background and the flat cartoon art style exactly unchanged."
+      },
+      "styles": {
+        "quiff": "Give him short ash grey undercut hair with a swept-up quiff on top, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "buzz": "Give him a very short ash grey buzz cut, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "curly": "Give him short curly ash grey hair, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "long": "Give him shoulder-length wavy ash grey hair, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "bald": "Make him completely bald with a smooth shaved head, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged."
+      },
+      "beardOn": "buzz",
+      "beards": {
+        "full": "Add a full thick ash grey beard with a mustache. Keep everything else, including his hair, face and the flat cartoon art style, exactly unchanged.",
+        "goatee": "Add a short ash grey goatee with a mustache. Keep everything else, including his hair, face and the flat cartoon art style, exactly unchanged."
+      },
+      "eyes": [
+        [
+          81,
+          39,
+          94,
+          47.5
+        ],
+        [
+          103,
+          39,
+          116,
+          47.5
+        ]
+      ]
+    }
+  }
+}

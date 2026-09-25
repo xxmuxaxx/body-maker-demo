@@ -1,0 +1,615 @@
+{
+  "canvas": {
+    "width": 640,
+    "height": 1536
+  },
+  "bases": {
+    "man-1": {
+      "skinLum": 203,
+      "layers": {
+        "brazil-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 226
+        },
+        "captain-shirt": {
+          "slot": "shirt",
+          "seed": 2,
+          "refLum": 255
+        },
+        "club-shirt": {
+          "slot": "shirt",
+          "seed": 3,
+          "refLum": 206
+        },
+        "england-shirt": {
+          "slot": "shirt",
+          "seed": 3,
+          "refLum": 255
+        },
+        "golden-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 219
+        },
+        "grip-gloves": {
+          "slot": "gloves",
+          "seed": 2,
+          "refLum": 135
+        },
+        "keeper-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 183
+        },
+        "kit-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "kit-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 255
+        },
+        "lightning-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 217
+        },
+        "portugal-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 46
+        },
+        "saudi-shirt": {
+          "slot": "shirt",
+          "seed": 3,
+          "refLum": 218
+        },
+        "speed-boots": {
+          "slot": "boots",
+          "seed": 2,
+          "refLum": 167
+        },
+        "studs-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 80
+        },
+        "training-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "training-shorts": {
+          "slot": "shorts",
+          "seed": 2,
+          "refLum": 109
+        },
+        "wall-gloves": {
+          "slot": "gloves",
+          "seed": 3,
+          "refLum": 186
+        }
+      },
+      "underwearTop": false,
+      "shortsTop": 227
+    },
+    "man-2": {
+      "layers": {
+        "brazil-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 219
+        },
+        "captain-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "club-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 202
+        },
+        "england-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "golden-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 221
+        },
+        "grip-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 129
+        },
+        "keeper-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 176
+        },
+        "kit-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "kit-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 255
+        },
+        "lightning-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 48
+        },
+        "portugal-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 49
+        },
+        "saudi-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 228
+        },
+        "speed-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 194
+        },
+        "studs-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 63
+        },
+        "training-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "training-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 112
+        },
+        "wall-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 199
+        }
+      },
+      "skinLum": 208,
+      "underwearTop": false,
+      "shortsTop": 228
+    },
+    "man-3": {
+      "layers": {
+        "brazil-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 221
+        },
+        "captain-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "club-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 204
+        },
+        "england-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "golden-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 220
+        },
+        "grip-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 151
+        },
+        "keeper-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 176
+        },
+        "kit-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "kit-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 255
+        },
+        "lightning-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 51
+        },
+        "portugal-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 59
+        },
+        "saudi-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 243
+        },
+        "speed-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 194
+        },
+        "studs-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 140
+        },
+        "training-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "training-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 125
+        },
+        "wall-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 216
+        }
+      },
+      "skinLum": 202,
+      "underwearTop": false,
+      "shortsTop": 255
+    },
+    "woman-1": {
+      "layers": {
+        "brazil-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 222
+        },
+        "captain-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "club-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 196
+        },
+        "england-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "golden-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 232
+        },
+        "grip-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 127
+        },
+        "keeper-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 176
+        },
+        "kit-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "kit-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 255
+        },
+        "lightning-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 49
+        },
+        "portugal-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 45
+        },
+        "saudi-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 232
+        },
+        "speed-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 193
+        },
+        "studs-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 47
+        },
+        "training-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "training-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 97
+        },
+        "wall-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 201
+        }
+      },
+      "skinLum": 209,
+      "underwearTop": true,
+      "shortsTop": 227
+    },
+    "woman-2": {
+      "layers": {
+        "brazil-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 222
+        },
+        "captain-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "club-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 195
+        },
+        "england-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "golden-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 229
+        },
+        "grip-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 131
+        },
+        "keeper-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 175
+        },
+        "kit-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "kit-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 255
+        },
+        "lightning-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 48
+        },
+        "portugal-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 45
+        },
+        "saudi-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 233
+        },
+        "speed-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 192
+        },
+        "studs-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 88
+        },
+        "training-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 255
+        },
+        "training-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 98
+        },
+        "wall-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 197
+        }
+      },
+      "skinLum": 209,
+      "underwearTop": true,
+      "shortsTop": 227
+    },
+    "woman-3": {
+      "layers": {
+        "brazil-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 214
+        },
+        "captain-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "club-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 202
+        },
+        "england-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "golden-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 229
+        },
+        "grip-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 132
+        },
+        "keeper-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 172
+        },
+        "kit-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "kit-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 255
+        },
+        "lightning-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 201
+        },
+        "portugal-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 63
+        },
+        "saudi-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 236
+        },
+        "speed-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 194
+        },
+        "studs-boots": {
+          "slot": "boots",
+          "seed": 1,
+          "refLum": 70
+        },
+        "training-shirt": {
+          "slot": "shirt",
+          "seed": 1,
+          "refLum": 254
+        },
+        "training-shorts": {
+          "slot": "shorts",
+          "seed": 1,
+          "refLum": 134
+        },
+        "wall-gloves": {
+          "slot": "gloves",
+          "seed": 1,
+          "refLum": 205
+        }
+      },
+      "skinLum": 211,
+      "underwearTop": true,
+      "shortsTop": 252
+    }
+  },
+  "heads": {
+    "woman-bun": {
+      "seed": 2,
+      "skinLum": 215,
+      "hairLum": 158
+    },
+    "woman-long": {
+      "seed": 1,
+      "skinLum": 220,
+      "hairLum": 164
+    },
+    "woman-ponytail": {
+      "seed": 1,
+      "skinLum": 219,
+      "hairLum": 181
+    },
+    "woman-bob": {
+      "seed": 2,
+      "skinLum": 217,
+      "hairLum": 192
+    },
+    "man-quiff": {
+      "seed": 2,
+      "skinLum": 218,
+      "hairLum": 156
+    },
+    "man-buzz": {
+      "seed": 1,
+      "skinLum": 218,
+      "hairLum": 157
+    },
+    "man-curly": {
+      "seed": 2,
+      "skinLum": 217,
+      "hairLum": 172
+    },
+    "man-long": {
+      "seed": 1,
+      "skinLum": 220,
+      "hairLum": 171
+    },
+    "man-bald": {
+      "seed": 1,
+      "skinLum": 219,
+      "hairLum": 200
+    },
+    "man-beard-full": {
+      "seed": 1,
+      "beardLum": 143
+    },
+    "man-beard-goatee": {
+      "seed": 1,
+      "beardLum": 150
+    }
+  }
+}

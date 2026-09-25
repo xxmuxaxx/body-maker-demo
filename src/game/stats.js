@@ -40,3 +40,12 @@ export const computeStats = (state, boosterId = null) => {
     total: addStats(BASE_STATS, state.allocated, itemStats, boosterStats),
   };
 };
+
+// Equipped item per slot as { id, look }, for drawing the character's outfit.
+export const outfitItems = ({ inventory, equipped }) =>
+  Object.fromEntries(
+    Object.entries(equipped).map(([slot, uid]) => {
+      const entry = inventory.find((e) => e.uid === uid);
+      return [slot, entry ? { id: entry.itemId, look: itemsById[entry.itemId].look } : null];
+    })
+  );

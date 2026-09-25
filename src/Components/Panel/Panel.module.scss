@@ -82,6 +82,7 @@
   svg {
     position: static !important;
     transform: none !important;
+    filter: drop-shadow(1.5px 0 0 #16181a) drop-shadow(-1.5px 0 0 #16181a) drop-shadow(0 1.5px 0 #16181a) drop-shadow(0 -1.5px 0 #16181a);
   }
 }
 

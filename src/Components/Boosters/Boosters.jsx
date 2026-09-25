@@ -3,7 +3,7 @@ import {useNavigate} from "react-router";
 
 import Button from "../utils/Button/Button";
 import {boosters} from "../../game/catalog";
-import {imageUrl} from "../../data/images";
+import {artUrl} from "../../data/images";
 import {useGameStore} from "../../store/gameStore";
 
 import styles from './Boosters.module.scss'
@@ -21,7 +21,7 @@ const Boosters = (props) => {
                         <p className={styles.cardTitle}>{booster.title}</p>
                         <p className={styles.cardDescription}>{booster.description}</p>
                         <div className={styles.cardImageWrapper}>
-                            <img src={imageUrl(booster.img)} className={styles.cardImage} alt=""/>
+                            <img src={artUrl("boosters", booster)} className={styles.cardImage} alt=""/>
                             <span className={styles.cardCount}>×{count}</span>
                         </div>
                         <Button disabled={!count} onClick={() => navigate(`/match?booster=${booster.id}`)}>
