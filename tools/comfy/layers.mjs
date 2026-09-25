@@ -161,10 +161,9 @@ export const CHIN_Y = 84;
 // Cuts a generated head (ash grey hair on purpose, magenta clothes) into three layers the app
 // recolors: skin (tinted like the body), hair with brows (tinted with the hair color) and ink
 // (outlines and eyes, never tinted). Below the chin only the grey hair is kept.
-// Eye boxes (body units) always go to ink: some variants draw light grey irises.
-const EYE_BOXES = [[79, 43, 94, 51.5], [102, 43, 117, 51.5]];
-
-export const splitHead = async (editPng) => {
+// Eye boxes (body units, per face in character.json) always go to ink: some variants draw
+// light grey irises.
+export const splitHead = async (editPng, { eyeBoxes = [] } = {}) => {
   const edit = await rgba(await removeBackground(editPng));
   const skin = Buffer.alloc(W * H * 4);
   const hair = Buffer.alloc(W * H * 4);
@@ -197,7 +196,7 @@ export const splitHead = async (editPng) => {
     const saturation = max ? (max - min) / max : 0;
     const l = lum(edit, i, 4);
     const isHair = saturation < 0.16 && l > 55;
-    const inEye = EYE_BOXES.some(([x1, y1, x2, y2]) => bx >= x1 && bx <= x2 && by >= y1 && by <= y2);
+    const inEye = eyeBoxes.some(([x1, y1, x2, y2]) => bx >= x1 && bx <= x2 && by >= y1 && by <= y2);
     if (by > CHIN_Y && !(greyBelow[i] && solid(i))) continue;
     const pixel = edit.subarray(i * 4, i * 4 + 4);
     if (l < 55 || (inEye && saturation < 0.16)) ink.set(pixel, i * 4);
@@ -212,4 +211,26 @@ export const splitHead = async (editPng) => {
     skinLum: Math.round(percentile(skinValues, 0.5)),
     hairLum: Math.round(percentile(hairValues, 0.9)),
   };
+};
+
+// A beard layer: what the beard edit changed on the beardless head, around the jaw.
+// Grey beard and its dark outlines both go in; the app tints the whole layer, which keeps
+// the outlines dark.
+export const extractBeard = async (editPng, headPng) => {
+  const edit = await rgba(editPng);
+  const head = await rgba(headPng);
+  const values = [];
+  for (let i = 0; i < W * H; i++) {
+    const [bx, by] = toBody(i % W, Math.floor(i / W));
+    const d = Math.max(...[0, 1, 2].map((c) => Math.abs(edit[i * 4 + c] - head[i * 4 + c])));
+    const inJaw = bx > 60 && bx < 136 && by > 44 && by < 115;
+    edit[i * 4 + 3] = inJaw && d > 40 ? 255 : 0;
+    if (edit[i * 4 + 3]) {
+      const [r, g, b] = [edit[i * 4], edit[i * 4 + 1], edit[i * 4 + 2]];
+      const max = Math.max(r, g, b), min = Math.min(r, g, b);
+      if (max && (max - min) / max < 0.16 && lum(edit, i, 4) > 80) values.push(lum(edit, i, 4));
+    }
+  }
+  values.sort((a, b) => a - b);
+  return { beard: await toPng(edit), beardLum: Math.round(values[Math.floor(values.length * 0.9)] ?? 180) };
 };

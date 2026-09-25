@@ -77,7 +77,55 @@
         "from": "woman-1",
         "seed": 1,
         "prompt": "Change the color of her sports bra top and her shorts to bright solid magenta. Keep her face, hair, pose, body, the white background and the flat cartoon art style exactly unchanged."
-      }
+      },
+      "eyes": [
+        [
+          79,
+          43,
+          94,
+          51.5
+        ],
+        [
+          102,
+          43,
+          117,
+          51.5
+        ]
+      ]
+    },
+    "man": {
+      "from": "man-1",
+      "source": {
+        "from": "man-1",
+        "seed": 1,
+        "prompt": "Change the color of his shorts to bright solid magenta. Keep his face, hair, pose, body, the white background and the flat cartoon art style exactly unchanged."
+      },
+      "styles": {
+        "quiff": "Give him short ash grey undercut hair with a swept-up quiff on top, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "buzz": "Give him a very short ash grey buzz cut, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "curly": "Give him short curly ash grey hair, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "long": "Give him shoulder-length wavy ash grey hair, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged.",
+        "bald": "Make him completely bald with a smooth shaved head, a clean-shaven face with no beard and no mustache, and ash grey eyebrows. Keep his face shape, eyes, nose, mouth, expression, the pose, body, shorts and their magenta color, the white background and the flat cartoon art style exactly unchanged."
+      },
+      "beardOn": "buzz",
+      "beards": {
+        "full": "Add a full thick ash grey beard with a mustache. Keep everything else, including his hair, face and the flat cartoon art style, exactly unchanged.",
+        "goatee": "Add a short ash grey goatee with a mustache. Keep everything else, including his hair, face and the flat cartoon art style, exactly unchanged."
+      },
+      "eyes": [
+        [
+          81,
+          39,
+          94,
+          47.5
+        ],
+        [
+          103,
+          39,
+          116,
+          47.5
+        ]
+      ]
     }
   }
 }

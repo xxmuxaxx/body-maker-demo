@@ -9,7 +9,7 @@ import styles from "./index.module.scss";
 import BodyChangeColor from "./BodyChangeColor";
 import { useGameStore } from "../../store/gameStore";
 import { outfitItems } from "../../game/stats";
-import { availableHairstyles } from "./characterLayers";
+import { availableBeards, availableHairstyles, hairstyleField } from "./characterLayers";
 
 const BodyMaker = () => {
   const navigate = useNavigate();
@@ -30,9 +30,12 @@ const BodyMaker = () => {
     setSaved(false);
   };
 
-  // Women get a generated head: a hairstyle choice instead of the SVG head's detail colors.
-  const hairstyles = sex === "woman" ? availableHairstyles("woman") : [];
+  // With generated heads there is a hairstyle (and for men a beard) choice instead of the
+  // SVG head's detail colors.
+  const hairstyles = availableHairstyles(sex);
   const generatedHead = hairstyles.length > 0;
+  const beards = sex === "woman" ? [] : availableBeards();
+  const hairField = hairstyleField(sex);
 
   const onSave = () => {
     const isFirstSave = !profile.created;
@@ -101,8 +104,8 @@ const BodyMaker = () => {
                 label="Причёска"
                 name="hairstyle"
                 items={hairstyles}
-                value={appearance.femaleHair ?? "bun"}
-                onChange={update("femaleHair")}
+                value={appearance[hairField] ?? hairstyles[0].value}
+                onChange={update(hairField)}
               />
             </div>
           )}
@@ -173,7 +176,7 @@ const BodyMaker = () => {
             </div>
           )}
 
-          {!generatedHead && (
+          {(!generatedHead || beards.length > 0) && (
             <div className={styles.blockGroup}>
               <BodyChangeColor
                 label="Борода"
@@ -194,6 +197,16 @@ const BodyMaker = () => {
                 onCheck={update("showBeard")}
                 onChange={update("beardColor")}
               />
+              {generatedHead && appearance.showBeard && beards.length > 0 && (
+                <div className={styles.subGroup}>
+                  <Radios
+                    name="beard-style"
+                    items={beards}
+                    value={appearance.beardStyle ?? beards[0].value}
+                    onChange={update("beardStyle")}
+                  />
+                </div>
+              )}
             </div>
           )}
 

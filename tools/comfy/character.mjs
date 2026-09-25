@@ -18,7 +18,7 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
 import { createClient } from "./client.mjs";
-import { H, W, extractLayer, slotArea, splitBase, splitHead, toWebp } from "./layers.mjs";
+import { H, W, extractBeard, extractLayer, slotArea, splitBase, splitHead, toWebp } from "./layers.mjs";
 import { fillWorkflow } from "./workflow.mjs";
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -115,6 +115,7 @@ const commands = {
     const seeds = seedsFrom(args.seeds, "1,2,3");
     const cells = [];
     for (const [sex, def] of Object.entries(config.heads)) {
+      if (args.sex && args.sex !== sex) continue;
       // Heads are generated on a copy of the base in bright magenta clothes, so the grey hair
       // separates cleanly from the clothes even where long hair falls over them.
       const sourceFile = path.join(basesDir, `${sex}-head-source.png`);
@@ -151,7 +152,7 @@ const commands = {
       const def = config.heads[sex];
       if (!def?.styles[style]) throw new Error(`Unknown head ${key}`);
       const edit = await readFile(path.join(variantsDir, "heads", `${key}-${seed}.png`));
-      const { skin, hair, ink, skinLum, hairLum } = await splitHead(edit);
+      const { skin, hair, ink, skinLum, hairLum } = await splitHead(edit, { eyeBoxes: def.eyes });
       const dir = path.join(outDir, "heads", key);
       await mkdir(dir, { recursive: true });
       await writeFile(path.join(dir, "skin.webp"), await toWebp(skin));
@@ -159,6 +160,47 @@ const commands = {
       await writeFile(path.join(dir, "ink.webp"), await toWebp(ink));
       manifest.heads[key] = { seed: Number(seed), skinLum, hairLum };
       console.log(`+ head ${key} (skin ${skinLum}, hair ${hairLum})`);
+    }
+    await writeManifest(manifest);
+  },
+
+  // Beards: Klein edits of the picked beardless head named by "beardOn" (men).
+  async beards(args) {
+    const comfy = client();
+    const manifest = await readManifest();
+    const seeds = seedsFrom(args.seeds, "1,2");
+    const def = config.heads.man;
+    const headSeed = manifest.heads?.[`man-${def.beardOn}`]?.seed;
+    if (!headSeed) throw new Error(`Pick the man-${def.beardOn} head first`);
+    const image = await comfy.upload(await readFile(path.join(variantsDir, "heads", `man-${def.beardOn}-${headSeed}.png`)), "character-man-beardless.png");
+    const cells = [];
+    for (const [style, prompt] of Object.entries(def.beards)) {
+      for (const seed of seeds) {
+        const file = path.join(variantsDir, "heads", `man-beard-${style}-${seed}.png`);
+        cells.push({ label: `beard-${style} #${seed}`, file });
+        if (existsSync(file) && !args.force) continue;
+        await writeFile(file, await kleinEdit(comfy, image, prompt, seed, `body-maker/character/beard-${style}`));
+        console.log(`+ beard ${style} seed ${seed}`);
+      }
+    }
+    await writeGrid(cells, path.join(variantsDir, "heads", "sheet-beards.png"), [160, 60, 320, 320], 4);
+  },
+
+  // pick-beard full=1 ...
+  async "pick-beard"(args) {
+    const manifest = await readManifest();
+    const def = config.heads.man;
+    const headSeed = manifest.heads[`man-${def.beardOn}`].seed;
+    const headPng = await readFile(path.join(variantsDir, "heads", `man-${def.beardOn}-${headSeed}.png`));
+    for (const choice of args._) {
+      const [style, seed] = choice.split("=");
+      if (!def.beards[style]) throw new Error(`Unknown beard ${style}`);
+      const { beard, beardLum } = await extractBeard(await readFile(path.join(variantsDir, "heads", `man-beard-${style}-${seed}.png`)), headPng);
+      const dir = path.join(outDir, "heads", `man-beard-${style}`);
+      await mkdir(dir, { recursive: true });
+      await writeFile(path.join(dir, "beard.webp"), await toWebp(beard));
+      manifest.heads[`man-beard-${style}`] = { seed: Number(seed), beardLum };
+      console.log(`+ beard ${style} (beard ${beardLum})`);
     }
     await writeManifest(manifest);
   },

@@ -577,6 +577,39 @@
       "seed": 2,
       "skinLum": 217,
       "hairLum": 192
+    },
+    "man-quiff": {
+      "seed": 2,
+      "skinLum": 218,
+      "hairLum": 156
+    },
+    "man-buzz": {
+      "seed": 1,
+      "skinLum": 218,
+      "hairLum": 157
+    },
+    "man-curly": {
+      "seed": 2,
+      "skinLum": 217,
+      "hairLum": 172
+    },
+    "man-long": {
+      "seed": 1,
+      "skinLum": 220,
+      "hairLum": 171
+    },
+    "man-bald": {
+      "seed": 1,
+      "skinLum": 219,
+      "hairLum": 200
+    },
+    "man-beard-full": {
+      "seed": 1,
+      "beardLum": 143
+    },
+    "man-beard-goatee": {
+      "seed": 1,
+      "beardLum": 150
     }
   }
 }

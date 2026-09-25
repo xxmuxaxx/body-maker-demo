@@ -25,16 +25,38 @@ export const tintMatrix = (hex, refLum) => {
   return `${row(r)} ${row(g)} ${row(b)} 0 0 0 1 0`;
 };
 
-// Generated heads (women): skin / hair / ink layers per hairstyle, see tools/comfy/character.mjs.
-export const HAIRSTYLES = [
-  { value: "bun", name: "пучок" },
-  { value: "long", name: "длинные" },
-  { value: "ponytail", name: "хвост" },
-  { value: "bob", name: "каре" },
+// Generated heads: skin / hair / ink layers per hairstyle, plus beard overlays for men.
+// See tools/comfy/character.mjs.
+export const HAIRSTYLES = {
+  woman: [
+    { value: "bun", name: "пучок" },
+    { value: "long", name: "длинные" },
+    { value: "ponytail", name: "хвост" },
+    { value: "bob", name: "каре" },
+  ],
+  man: [
+    { value: "quiff", name: "кок" },
+    { value: "buzz", name: "ёжик" },
+    { value: "curly", name: "кудри" },
+    { value: "long", name: "длинные" },
+    { value: "bald", name: "лысый" },
+  ],
+};
+
+export const BEARDS = [
+  { value: "full", name: "полная" },
+  { value: "goatee", name: "эспаньолка" },
 ];
 
-export const headKeyFor = (sex, appearance) =>
-  sex === "woman" ? `woman-${appearance?.femaleHair ?? "bun"}` : null;
+// Appearance field that stores the hairstyle for each sex.
+export const hairstyleField = (sex) => (sex === "woman" ? "femaleHair" : "maleHair");
+
+export const headKeyFor = (sex, appearance = {}) => {
+  if (sex === "woman") return `woman-${appearance.femaleHair ?? "bun"}`;
+  // The SVG head's "hair off" switch maps to the bald head.
+  const style = appearance.showHair === false ? "bald" : appearance.maleHair ?? "quiff";
+  return `man-${style}`;
+};
 
 export const headInfo = (headKey) => (headKey ? manifest?.heads?.[headKey] ?? null : null);
 
@@ -42,5 +64,14 @@ export const headUrl = (headKey, part) => headFiles[`../../assets/character/head
 
 export const hasGeneratedHead = (headKey) => Boolean(headInfo(headKey) && headUrl(headKey, "skin"));
 
+export const beardKeyFor = (sex, appearance = {}) => {
+  if (sex === "woman" || !appearance.showBeard) return null;
+  const key = `man-beard-${appearance.beardStyle ?? "full"}`;
+  return headInfo(key) && headUrl(key, "beard") ? key : null;
+};
+
 export const availableHairstyles = (sex) =>
-  HAIRSTYLES.filter((style) => hasGeneratedHead(headKeyFor(sex, { femaleHair: style.value })));
+  HAIRSTYLES[sex === "woman" ? "woman" : "man"].filter((style) =>
+    hasGeneratedHead(headKeyFor(sex, { [hairstyleField(sex)]: style.value })));
+
+export const availableBeards = () => BEARDS.filter((beard) => headInfo(`man-beard-${beard.value}`));
