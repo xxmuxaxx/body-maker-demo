@@ -13,9 +13,12 @@ import Stats from "./Containers/Stats/Stats";
 import "normalize.css";
 import "./app.scss";
 
+// Vite's base path ("/" locally, "/body-maker-demo/" on GitHub Pages) without the trailing slash.
+const basename = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 const App = () => {
     return (
-        <BrowserRouter>
+        <BrowserRouter basename={basename}>
             <Layout>
                 <Routes>
                     <Route path="/" element={<Home/>}/>

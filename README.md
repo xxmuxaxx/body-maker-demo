@@ -20,6 +20,8 @@
 - **Ловкость**: шанс взять мяч, если угадал угол;
 - **Защита**: соперник чаще промахивается.
 
+Демо: https://xxmuxaxx.github.io/body-maker-demo/
+
 ## Стек
 
 - [React 19](https://react.dev/)
@@ -115,3 +117,9 @@ yarn gen:character pick --base=woman-2 golden-boots=1 # сохранить ва�
 Баз шесть: мужская и женская в трёх телосложениях (`man-1` … `woman-3`).
 
 Слои лежат в `src/assets/character/`. Если у вещи нет слоя, на персонаже рисуется её SVG-версия.
+
+## Публикация
+
+Сайт собирается и выкладывается на GitHub Pages workflow `.github/workflows/deploy.yml`
+при каждом пуше в `master` (или вручную из вкладки Actions). В настройках репозитория
+Pages должен брать сайт из GitHub Actions: Settings → Pages → Source: GitHub Actions.

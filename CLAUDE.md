@@ -14,6 +14,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 To verify a change, run `yarn lint && yarn test && yarn build` and check the page in the browser.
 
+Deploy: `.github/workflows/deploy.yml` builds with `BASE_PATH=/<repo>/` and publishes to GitHub Pages on every push to `master`. `vite.config.js` reads `BASE_PATH`, and `App.jsx` passes Vite's `BASE_URL` to the router as `basename`. The workflow copies `index.html` to `404.html` so deep links work. Keep links inside the app going through the router, and assets going through imports, so they follow the base path.
+
 ## Architecture
 
 This is a frontend-only React 19 mini-game built with Vite. It has no backend. The player's progress is a zustand store persisted to localStorage. UI text is in Russian.

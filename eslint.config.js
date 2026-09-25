@@ -25,6 +25,10 @@ export default [
     },
   },
   {
+    files: ["*.config.js"],
+    languageOptions: { globals: globals.node },
+  },
+  {
     files: ["tools/**/*.mjs"],
     languageOptions: {
       ecmaVersion: "latest",
