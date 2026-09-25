@@ -26,7 +26,7 @@ const maskOf = async (inner, grow = 0) => {
 export const slotArea = (slot) => {
   const white = 'fill="#fff"';
   if (slot === "shirt") {
-    return maskOf(`<clipPath id="t"><rect x="-50" y="-50" width="400" height="${TUCK_Y + 50}"/></clipPath>` +
+    return maskOf(`<clipPath id="t"><rect x="-50" y="-50" width="400" height="${TUCK_Y + 90}"/></clipPath>` +
       `<g clip-path="url(#t)"><path d="${SHIRT_PATH}" transform="${SHIRT_TRANSFORM}" ${white}/></g>`, 26);
   }
   if (slot === "shorts") return maskOf(`<path d="${SHORTS_PATH}" ${white}/>`, 26);
@@ -72,6 +72,9 @@ export const splitBase = async (basePng) => {
   const top = Buffer.alloc(W * H * 4);
   const bottom = Buffer.alloc(W * H * 4);
   let skinSum = 0, skinCount = 0, topCount = 0;
+  let shortsTop = Infinity;
+  const underwearPixels = [];
+  const skinRgb = [];
 
   for (let i = 0; i < W * H; i++) {
     const [bx, by] = toBody(i % W, Math.floor(i / W));
@@ -84,14 +87,25 @@ export const splitBase = async (basePng) => {
     const max = Math.max(r, g, b), min = Math.min(r, g, b);
     const saturation = max ? (max - min) / max : 0;
     const l = lum(cut, i, 4);
-    if (torso[i] > 127 && saturation < 0.12 && l > 70) {
+    if (cut[i * 4 + 3] > 0 && torso[i] > 127 && saturation < 0.12 && l > 70) {
       if (by < UNDERWEAR_SPLIT_Y) topCount++;
+      else if (bx > 60 && bx < 130) shortsTop = Math.min(shortsTop, by);
       (by < UNDERWEAR_SPLIT_Y ? top : bottom).set(cut.subarray(i * 4, i * 4 + 4), i * 4);
-      skin[i * 4 + 3] = 0;
+      underwearPixels.push(i);
     } else if (skin[i * 4 + 3] === 255 && saturation > 0.12 && l > 120) {
       skinSum += l;
       skinCount++;
+      if (skinCount % 7 === 0) skinRgb.push([r, g, b]);
     }
+  }
+  // Under the underwear the skin layer gets a flat skin color instead of a hole: clothes that
+  // came out smaller than the grey underwear would otherwise show the background.
+  const median = [0, 1, 2].map((c) => skinRgb.map((p) => p[c]).sort((a, b) => a - b)[Math.floor(skinRgb.length / 2)]);
+  for (const i of underwearPixels) {
+    skin[i * 4] = median[0];
+    skin[i * 4 + 1] = median[1];
+    skin[i * 4 + 2] = median[2];
+    skin[i * 4 + 3] = 255;
   }
   const hasTop = topCount > 3000; // a real sports top, not a few greyish pixels
   return {
@@ -99,6 +113,7 @@ export const splitBase = async (basePng) => {
     underwear: await toPng(bottom),
     underwearTop: hasTop ? await toPng(top) : null,
     skinLum: Math.round(skinSum / skinCount),
+    shortsTop: Math.round(shortsTop),
   };
 };
 

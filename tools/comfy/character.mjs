@@ -171,14 +171,14 @@ const commands = {
       if (!config.bases[key]) throw new Error(`Unknown base ${key}`);
       const source = path.join(variantsDir, "bases", `${key}-${seed}.png`);
       if (existsSync(source)) await copyFile(source, path.join(basesDir, `${key}.png`));
-      const { skin, underwear, underwearTop, skinLum } = await splitBase(await readFile(path.join(basesDir, `${key}.png`)));
+      const { skin, underwear, underwearTop, skinLum, shortsTop } = await splitBase(await readFile(path.join(basesDir, `${key}.png`)));
       const dir = path.join(outDir, key);
       await mkdir(dir, { recursive: true });
       await writeFile(path.join(dir, "base.webp"), await toWebp(skin));
       await writeFile(path.join(dir, "underwear.webp"), await toWebp(underwear));
       if (underwearTop) await writeFile(path.join(dir, "underwear-top.webp"), await toWebp(underwearTop));
-      manifest.bases[key] = { ...(manifest.bases[key] ?? { layers: {} }), skinLum, underwearTop: Boolean(underwearTop) };
-      console.log(`+ ${key}: base.webp, underwear${underwearTop ? " + top" : ""} (skin luminance ${skinLum})`);
+      manifest.bases[key] = { ...(manifest.bases[key] ?? { layers: {} }), skinLum, shortsTop, underwearTop: Boolean(underwearTop) };
+      console.log(`+ ${key}: base.webp, underwear${underwearTop ? " + top" : ""} (skin luminance ${skinLum}, shorts from y ${shortsTop})`);
     }
     await writeManifest(manifest);
   },
@@ -228,7 +228,7 @@ const commands = {
       for (const choice of choices) {
         const [id, seed] = choice.split("=");
         if (!defs[id]) throw new Error(`Unknown layer id ${id}`);
-        const layer = await cutLayer(defs[id].slot, await readFile(path.join(variantsDir, key, `${id}-${seed}.png`)), basePng);
+        const layer = await cutLayer(defs[id].slot, await readFile(path.join(variantsDir, key, `${id}-${seed}.png`)), basePng, manifest.bases[key].shortsTop);
         await writeFile(path.join(outDir, key, `${id}.webp`), await toWebp(layer));
         manifest.bases[key].layers[id] = { slot: defs[id].slot, seed: Number(seed), refLum: await brightLuminance(layer) };
       }
@@ -249,8 +249,10 @@ const brightLuminance = async (png) => {
   return Math.round(values[Math.floor(values.length * 0.9)] ?? 235);
 };
 
-const cutLayer = async (slot, editPng, basePng) =>
-  extractLayer(editPng, basePng, await slotArea(slot), { cutBelowY: slot === "shirt" ? 230 : null });
+// A tucked shirt ends a little below where this base's shorts start.
+const cutLayer = async (slot, editPng, basePng, shortsTop = 224) =>
+  extractLayer(editPng, basePng, await slotArea(slot), { cutBelowY: slot === "shirt" ? shortsTop + 6 : null });
+const shortsTopOf = async (key) => (await readManifest()).bases[key]?.shortsTop;
 
 // Review grids: files = [{ label, file | buffer }], each cropped to `crop` and fit into a cell.
 const writeGrid = async (cells, file, [left, top, width, height], columns, cell = 220) => {
@@ -278,7 +280,7 @@ const writeItemSheet = async (key, ids, seeds, defs, basePng) => {
     for (const seed of seeds) {
       const file = path.join(variantsDir, key, `${id}-${seed}.png`);
       if (!existsSync(file)) continue;
-      const layer = await cutLayer(defs[id].slot, await readFile(file), basePng);
+      const layer = await cutLayer(defs[id].slot, await readFile(file), basePng, await shortsTopOf(key));
       const frame = await sharp({ create: { width: W, height: H, channels: 3, background: "#2a6e3f" } })
         .composite([{ input: await sharp(basePng).resize(W, H).png().toBuffer(), blend: "multiply" }, { input: layer }]).png().toBuffer();
       (bySlot[defs[id].slot] ??= []).push({ label: `${id} #${seed}`, buffer: frame });
